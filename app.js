@@ -1,2 +1,2 @@
 var notify = require("./notify.js")
-console.log(notify);
+notify.factory("topic",["rest"],["rest"])

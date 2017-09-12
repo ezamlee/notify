@@ -9,17 +9,18 @@ module.exports = {
 				mqtt:null,
 				rest:null
 			}
-			var getServer = function (listnerProtocol) {
-				if (servers.listnerProtocol == null) {
+
+			function getServer(protocol){
+				console.log(servers);
+				if(servers[protocol]){
+					console.log("server returned");
+					return this.server[protocol]
+				}else{
 					var express = require("express");
 					var app = express();
-					var server = app.listen(6600);
-
-					//return server
-					console.log("equal null");
-				}else {
-					// return listnerProtocol
-					console.log("not equal null");
+					app.listen(6600);
+					console.log("server created");
+					return app;
 				}
 			}
 			// each protocol server implementation
@@ -40,6 +41,7 @@ module.exports = {
 				},
 				rest:{
 					listner     : function(config){
+						return getServer("rest")
 						//return server
 					},
 					publisher   : function(config){
@@ -81,6 +83,7 @@ module.exports = {
 					)
 				})
 			}
+			server.rest.listner({});
 	},
 	list : {
 		store :{
