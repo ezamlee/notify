@@ -16,18 +16,32 @@ module.exports = {
 					console.log("server returned");
 					return servers[protocol]
 				}else{
-					var express = require("express");
-					var app = express();
-					app.listen(6600);
-					console.log("server created");
-					server[protocol] = app
-					return app;
+
+					if (protocol == 'rest') {
+						var express = require("express");
+						var app = express();
+						app.listen(6600);
+						console.log("server created");
+						server[protocol] = app
+						return app;
+					}
+					else if (protocol == 'ws') {
+						var express = require("express");
+						var app = express();
+						var srvr = app.listen(6600);
+						var io = require('socket.io').listen(srvr);
+						console.log("server created");
+						server[protocol] = app
+						return app;
+					}
+
 				}
 			}
 			// each protocol server implementation
 			var server = {
 				ws:{
 					listner     : function(config){
+						return getServer('ws')
 						//return server
 					},
 					publisher   : function(config){
