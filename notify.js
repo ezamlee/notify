@@ -14,12 +14,13 @@ module.exports = {
 				console.log(servers);
 				if(servers[protocol]){
 					console.log("server returned");
-					return this.server[protocol]
+					return servers[protocol]
 				}else{
 					var express = require("express");
 					var app = express();
 					app.listen(6600);
 					console.log("server created");
+					server[protocol] = app
 					return app;
 				}
 			}
