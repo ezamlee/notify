@@ -3,7 +3,26 @@
 
 module.exports = {
 	factory : function(topic,listnerProtocol,publisherProtocols){ 		//listnerProtocol => ['ws','rest'], publisherProtocols => ['ws','rest']
-				// each protocol server implementation
+
+			var servers = {
+				ws:null,
+				mqtt:null,
+				rest:null
+			}
+			var getServer = function (listnerProtocol) {
+				if (servers.listnerProtocol == null) {
+					var express = require("express");
+					var app = express();
+					var server = app.listen(6600);
+
+					//return server
+					console.log("equal null");
+				}else {
+					// return listnerProtocol
+					console.log("not equal null");
+				}
+			}
+			// each protocol server implementation
 			var server = {
 				ws:{
 					listner     : function(config){
@@ -67,10 +86,5 @@ module.exports = {
 		store :{
 			"DemoChannel" : []
 		}
-	},
-	servers : {
-		ws:null,
-		mqtt:null,
-		rest:null
 	}
 }
