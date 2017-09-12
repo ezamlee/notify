@@ -4,11 +4,11 @@
 module.exports = {
 	factory : function(topic,listnerProtocol,publisherProtocols){ 		//listnerProtocol => ['ws','rest'], publisherProtocols => ['ws','rest']
 				// each protocol server implementation
-			var server{
+			var server = {
 				ws:{
 					listner     : function(config){
 						//return server
-					},store
+					},
 					publisher   : function(config){
 						//return server
 					},
