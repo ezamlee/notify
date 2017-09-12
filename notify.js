@@ -28,7 +28,7 @@ module.exports = {
 					else if (protocol == 'ws') {
 						var express = require("express");
 						var app = express();
-						var srvr = app.listen(6600);
+						var srvr = app.listen(6500);
 						var io = require('socket.io').listen(srvr);
 						console.log("server created");
 						server[protocol] = app
@@ -98,7 +98,7 @@ module.exports = {
 					)
 				})
 			}
-			server.rest.listner({});
+			server.ws.listner({});
 	},
 	list : {
 		store :{
