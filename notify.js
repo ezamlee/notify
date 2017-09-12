@@ -10,38 +10,37 @@ module.exports = {
 				rest:null
 			}
 
-			function getServer(protocol){
+			function getServer(protocol, config){
 				console.log(servers);
 				if(servers[protocol]){
 					console.log("server returned");
 					return servers[protocol]
 				}else{
 
+					var express = require("express");
+					var app = express();
+
 					if (protocol == 'rest') {
-						var express = require("express");
-						var app = express();
-						app.listen(6600);
-						console.log("server created");
-						server[protocol] = app
-						return app;
+						app.listen(config.port);
+						console.log("server created on port " + config.port );
 					}
 					else if (protocol == 'ws') {
-						var express = require("express");
-						var app = express();
-						var srvr = app.listen(6500);
+						var srvr = app.listen(config.port);
 						var io = require('socket.io').listen(srvr);
-						console.log("server created");
-						server[protocol] = app
-						return app;
+						console.log("server created on port " + config.port );
 					}
 
+					server[protocol] = app
+					return app;
+
 				}
+
 			}
 			// each protocol server implementation
 			var server = {
 				ws:{
 					listner     : function(config){
-						return getServer('ws')
+						return getServer('ws', {'port':6000})
 						//return server
 					},
 					publisher   : function(config){
@@ -56,7 +55,7 @@ module.exports = {
 				},
 				rest:{
 					listner     : function(config){
-						return getServer("rest")
+						return getServer("rest", {'port':6600})
 						//return server
 					},
 					publisher   : function(config){
@@ -98,7 +97,7 @@ module.exports = {
 					)
 				})
 			}
-			server.ws.listner({});
+			server.rest.listner({});
 	},
 	list : {
 		store :{
