@@ -2,7 +2,7 @@
 //requrie modules here
 
 module.exports = {
-	factory : function(topic,listnerProtocol,publisherProtocols){ 		//listnerProtocol => ['ws','rest'], publisherProtocols => ['ws','rest']
+	factory : function(topic,listnerProtocols,publisherProtocols){ 		//listnerProtocols => ['ws','rest'], publisherProtocols => ['ws','rest']
 
 			var servers = {
 				ws:null,
@@ -11,6 +11,8 @@ module.exports = {
 			}
 			var lChannel = [];
 			var pChannel = [];
+			listnerProtocols =['ws','rest'];
+			publisherProtocols = ['ws','rest'];
 
 			function getServer(protocol){
 				console.log(servers);
@@ -27,7 +29,7 @@ module.exports = {
 						// parse application/json
 						app.use(bodyParser.json())
 						app.listen(7000);
-						console.log("server created");
+						console.log("rest server created");
 						server[protocol] = app
 						return app;
 					}
@@ -36,7 +38,7 @@ module.exports = {
 						var app = express();
 						var srvr = app.listen(6000);
 						var io = require('socket.io').listen(srvr);
-						console.log("server created");
+						console.log("ws server created");
 						server[protocol] = app
 						return app;
 					}
@@ -73,48 +75,56 @@ module.exports = {
 							console.log("post request " );
 						})
 					},
-					addLChannel : function(config){ //config = {'topic': topic}
-						lChannel.push(config['topic'])
+					addLChannel : function(config){ //config = {'route': route}
+						console.log("config = ", config);
+						lChannel.push(config['route'])
+						console.log("lChannel= ", lChannel);
 						return lChannel
 					},
 					addPChannel : function(config){
-						pChannel.push(config['topic'])
+						pChannel.push(config['route']);
+						console.log("pChannel= ", pChannel);
 						return pChannel
 					}
 				}
 			}
-			var initListeners = (listnerProtocol)=>{
-				listnerProtocol.foreach((protocol)=>{
-					server[protocol].listner(
-						{
-							//enter configuration here
-						}
-					)
-					server[protocol].addLChannel(
-						{
-							//enter configuration here
-						}
-					)
+			var initListeners = (config)=>{ // config => {'protocol':'', 'route':''}
+				console.log(config);
+				console.log(listnerProtocols);
+
+				listnerProtocols.forEach((lProtocol)=>{
+					console.log("lProtocoll",lProtocol);
+					if (config['protocol'] == lProtocol) {
+						console.log("they equal");
+						server[lProtocol].listner(
+							{
+								//enter configuration here
+							}
+						)
+						server[lProtocol].addLChannel({'route':'/notification'})
+					}
 				})
 			}
 			var initPublishers = (publisherProtocols)=>{
-				publisherProtocols.foreach((protocol)=>{
+				publisherProtocols.forEach((pProtocol)=>{
 
-					this.server[protocol].publisher(
+					this.server[pProtocol].publisher(
 						{
 							//enter configuration here
-							
+
 						}
 					)
-					this.server[protocol].addPChannel(
+					this.server[pProtocol].addPChannel(
 						{
 							//enter configuration here
+
 						}
 					)
 				})
 			}
-			// server.rest.listner({});
-			server.rest.publisher({'route':'users'});
+			return initListeners({'protocol':'rest', 'route': '/notificaction'})
+			// server.rest.addLChannel({'route':'/notification'});
+			// server.rest.publisher({'route':'users'});
 	},
 	list : {
 		store :{
