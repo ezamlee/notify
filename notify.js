@@ -50,7 +50,6 @@ module.exports = {
 			console.log("ws server started");
 			var io = require('socket.io').listen(srvr);
 			savedServers['ws'] = app
-			return app;
 		}
 
 		function restServer() {
@@ -63,7 +62,6 @@ module.exports = {
 			app.listen(7000);
 			console.log("rest server started");
 			savedServers['rest'] = app
-			return app;
 		}
 
 		restServer()
