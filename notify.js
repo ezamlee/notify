@@ -9,15 +9,15 @@ module.exports = {
 				mqtt:null,
 				rest:null
 			}
+
+			//please remove this varibles they should be passed dynamically to factory
 			var lChannel = [];
 			var pChannel = [];
 			listnerProtocols =['ws','rest'];
 			publisherProtocols = ['ws','rest'];
-
+			///end of delete
 			function getServer(protocol){
-				console.log(servers);
 				if(servers[protocol]){
-					console.log("server returned");
 					return servers[protocol]
 				}else{
 
@@ -29,7 +29,6 @@ module.exports = {
 						// parse application/json
 						app.use(bodyParser.json())
 						app.listen(7000);
-						console.log("rest server created");
 						server[protocol] = app
 						return app;
 					}
@@ -38,7 +37,6 @@ module.exports = {
 						var app = express();
 						var srvr = app.listen(6000);
 						var io = require('socket.io').listen(srvr);
-						console.log("ws server created");
 						server[protocol] = app
 						return app;
 					}
@@ -72,30 +70,23 @@ module.exports = {
 						//return server
 						var app = getServer("rest");
 						app.post('/', function(req,resp){
-							console.log("post request " );
 						})
 					},
 					addLChannel : function(config){ //config = {'route': route}
-						console.log("config = ", config);
 						lChannel.push(config['route'])
-						console.log("lChannel= ", lChannel);
 						return lChannel
 					},
 					addPChannel : function(config){
 						pChannel.push(config['route']);
-						console.log("pChannel= ", pChannel);
 						return pChannel
 					}
 				}
 			}
 			var initListeners = (config)=>{ // config => {'protocol':'', 'route':''}
-				console.log(config);
-				console.log(listnerProtocols);
 
 				listnerProtocols.forEach((lProtocol)=>{
-					console.log("lProtocoll",lProtocol);
 					if (config['protocol'] == lProtocol) {
-						console.log("they equal");
+						console.log(lProtocol,server)
 						server[lProtocol].listner(
 							{
 								//enter configuration here
