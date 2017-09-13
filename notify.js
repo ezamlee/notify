@@ -29,6 +29,7 @@ module.exports = {
 						// parse application/json
 						app.use(bodyParser.json())
 						app.listen(7000);
+						console.log("rest server started");
 						server[protocol] = app
 						return app;
 					}
@@ -36,6 +37,7 @@ module.exports = {
 						var express = require("express");
 						var app = express();
 						var srvr = app.listen(6000);
+						console.log("ws server started");
 						var io = require('socket.io').listen(srvr);
 						server[protocol] = app
 						return app;
@@ -64,47 +66,40 @@ module.exports = {
 				rest:{
 					listner     : function(config){
 						//return server
-						return getServer("rest")
+						return getServer("rest");
 					},
 					publisher   : function(config){
 						//return server
+						var app = getServer("rest");
 					},
 					addLChannel : function(topic){
-						console.log("topic = ", topic);
 						lChannel.push(topic);
 						return lChannel
+					},
+					addPChannel : function(topic){
+						pChannel.push(topic);
+						return pChannel
 					}
-					// ,
-					// addPChannel : function(topic){
-					// 	pChannel.push(topic);
-					// 	return pChannel
-					// }
 				}
 			}
 			var initListeners = (topic, listnerProtocol)=>{
-				console.log("listnerProtocols", listnerProtocols);
 				listnerProtocols.forEach((lProtocol)=>{
 					if (listnerProtocol == lProtocol) {
-						console.log("if(listnerProtocol == lProtocol)");
-						console.log("topic = ", topic);
-						server[lProtocol].listner({})
 						server[lProtocol].addLChannel(topic)
+						server[lProtocol].listner({});
 					}
 				})
 			}
 			var initPublishers = (publisherProtocols)=>{
 				publisherProtocols.forEach((pProtocol)=>{
-
 					this.server[pProtocol].publisher(
 						{
 							//enter configuration here
-
 						}
 					)
 					this.server[pProtocol].addPChannel(
 						{
 							//enter configuration here
-
 						}
 					)
 				})
