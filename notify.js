@@ -1,21 +1,21 @@
 
 //requrie modules here
 
-module.exports = {
-	factory : function(topic,listnerProtocols,publisherProtocols){ 		//listnerProtocols => ['ws','rest'], publisherProtocols => ['ws','rest']
+var lChannel = [];
+var pChannel = [];
+//listnerProtocols => ['ws','rest'], publisherProtocols => ['ws','rest']
+var listnerProtocols =['ws','rest'];
+var publisherProtocols = ['ws','rest'];
 
+
+module.exports = {
+	factory : function(topic,listnerProtocol,publisherProtocol){ 		//listnerProtocol => 'rest', publisherProtocol => 'ws'
 			var servers = {
 				ws:null,
 				mqtt:null,
 				rest:null
 			}
 
-			//please remove this varibles they should be passed dynamically to factory
-			var lChannel = [];
-			var pChannel = [];
-			listnerProtocols =['ws','rest'];
-			publisherProtocols = ['ws','rest'];
-			///end of delete
 			function getServer(protocol){
 				if(servers[protocol]){
 					return servers[protocol]
@@ -68,31 +68,27 @@ module.exports = {
 					},
 					publisher   : function(config){
 						//return server
-						var app = getServer("rest");
-						app.post('/', function(req,resp){
-						})
 					},
-					addLChannel : function(config){ //config = {'route': route}
-						lChannel.push(config['route'])
+					addLChannel : function(topic){
+						console.log("topic = ", topic);
+						lChannel.push(topic);
 						return lChannel
-					},
-					addPChannel : function(config){
-						pChannel.push(config['route']);
-						return pChannel
 					}
+					// ,
+					// addPChannel : function(topic){
+					// 	pChannel.push(topic);
+					// 	return pChannel
+					// }
 				}
 			}
-			var initListeners = (config)=>{ // config => {'protocol':'', 'route':''}
-
+			var initListeners = (topic, listnerProtocol)=>{
+				console.log("listnerProtocols", listnerProtocols);
 				listnerProtocols.forEach((lProtocol)=>{
-					if (config['protocol'] == lProtocol) {
-						console.log(lProtocol,server)
-						server[lProtocol].listner(
-							{
-								//enter configuration here
-							}
-						)
-						server[lProtocol].addLChannel({'route':'/notification'})
+					if (listnerProtocol == lProtocol) {
+						console.log("if(listnerProtocol == lProtocol)");
+						console.log("topic = ", topic);
+						server[lProtocol].listner({})
+						server[lProtocol].addLChannel(topic)
 					}
 				})
 			}
@@ -113,9 +109,7 @@ module.exports = {
 					)
 				})
 			}
-			return initListeners({'protocol':'rest', 'route': '/notificaction'})
-			// server.rest.addLChannel({'route':'/notification'});
-			// server.rest.publisher({'route':'users'});
+			initListeners(topic,listnerProtocol)
 	},
 	list : {
 		store :{
