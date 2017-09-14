@@ -1,2 +1,3 @@
-var notify = require("./notify.js")
+var notify = new require("./notify.js")
 notify.init()
+console.log(notify.ws.addLChannel);
