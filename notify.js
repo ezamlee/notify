@@ -25,7 +25,6 @@ notify.restServer = function(){
 	var app = express();
 	var bodyParser = require('body-parser');
 	app.use(bodyParser.urlencoded({ extended: false }));
-	// parse application/json
 	app.use(bodyParser.json())
 	app.listen(7000);
 	console.log("rest server started");
@@ -33,27 +32,37 @@ notify.restServer = function(){
 }
 
 notify.prototype.init = function(argument){
-	notify.prototype.ws = notify.wsServer();
-	notify.prototype.ws['addLChannel'] = notify.wsAddLChannel;
-	notify.prototype.ws['addPChannel'] = notify.wsAddPChannel;
-	notify.prototype.rest = notify.restServer();
-	notify.prototype.rest['addLChannel'] = notify.restAddLChannel;
-	notify.prototype.rest['addPChannel'] = notify.restAddPChannel;
+		notify.prototype.ws = notify.wsServer();
+		notify.prototype.ws['addLChannel'] = notify.wsAddLChannel;
+		notify.prototype.ws['addPChannel'] = notify.wsAddPChannel;
+		notify.prototype.rest = notify.restServer();
+		notify.prototype.rest['addLChannel'] = notify.restAddLChannel;
+		notify.prototype.rest['addPChannel'] = notify.restAddPChannel;
 };
 
 notify.wsAddLChannel = function(){
 	console.log("listener channel on ws created")
 }
+
 notify.wsAddPChannel = function(){
 	console.log("Publisher channel on ws created")
+}
+
+notify.restAddLChannel = function(topic, fn){
+
+	console.log("listener channel on rest created")
+	notify['list']['store'][topic] = [notify.rest];
+	var app = notify.rest;
+	var response = app.post('/'+topic, function(req, resp){
+		return resp;
+	})
+	restDB[topic] = response;
+	console.log("restDB = ", restDB);
 
 }
-notify.restAddLChannel = function(topic, fn){
-	console.log("listener channel on rest created")
-	notify['list']['store'][topic] = [notify.restServer];
-	restDB[topic] = fn
+
+notify.restAddPChannel = function(topic){
+	console.log("Publisher channel on rest created");
 }
-notify.restAddPChannel = function(){
-	console.log("Publisher channel on rest created")
-}
+
 module.exports = notify;
