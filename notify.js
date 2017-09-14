@@ -30,13 +30,13 @@ notify.restServer = function(){
 	return app;
 }
 
-notify.init = function(argument){
-	notify['ws'] = notify.wsServer();
-	notify.ws['addLChannel'] = notify.wsAddLChannel;
-	notify.ws['addPChannel'] = notify.wsAddPChannel;
-	notify['rest'] = notify.restServer(); 
-	notify.rest['addLChannel'] = notify.restAddLChannel;
-	notify.rest['addPChannel'] = notify.restAddPChannel;
+notify.prototype.init = function(argument){
+	notify.prototype.ws = notify.wsServer();
+	notify.prototype.ws.addLChannel = notify.wsAddLChannel;
+	notify.prototype.ws.addPChannel = notify.wsAddPChannel;
+	notify.prototype.rest = notify.restServer();
+	notify.prototype.rest['addLChannel'] = notify.restAddLChannel;
+	notify.prototype.rest['addPChannel'] = notify.restAddPChannel;
 };
 
 notify.wsAddLChannel = function(){
@@ -54,4 +54,3 @@ notify.restAddPChannel = function(){
 	console.log("Publisher channel on rest created")
 }
 module.exports = notify;
-
