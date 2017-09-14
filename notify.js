@@ -2,6 +2,8 @@
 function notify(){
 }
 
+var restDB = {};
+
 
 notify['list'] = {
 	store :{
@@ -32,8 +34,8 @@ notify.restServer = function(){
 
 notify.prototype.init = function(argument){
 	notify.prototype.ws = notify.wsServer();
-	notify.prototype.ws.addLChannel = notify.wsAddLChannel;
-	notify.prototype.ws.addPChannel = notify.wsAddPChannel;
+	notify.prototype.ws['addLChannel'] = notify.wsAddLChannel;
+	notify.prototype.ws['addPChannel'] = notify.wsAddPChannel;
 	notify.prototype.rest = notify.restServer();
 	notify.prototype.rest['addLChannel'] = notify.restAddLChannel;
 	notify.prototype.rest['addPChannel'] = notify.restAddPChannel;
@@ -46,9 +48,10 @@ notify.wsAddPChannel = function(){
 	console.log("Publisher channel on ws created")
 
 }
-notify.restAddLChannel = function(){
+notify.restAddLChannel = function(topic, fn){
 	console.log("listener channel on rest created")
-
+	notify['list']['store'][topic] = [notify.restServer];
+	restDB[topic] = fn
 }
 notify.restAddPChannel = function(){
 	console.log("Publisher channel on rest created")
