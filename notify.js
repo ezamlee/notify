@@ -37,7 +37,10 @@ notify.restServer = function(){
 }
 
 notify['create_mongo_connection'] = function(mongoHost,MongoPort,Database,Collection) {
-	 
+	var mongoose = require('mongoose');
+	mongoose.connect('mongodb://localhost/my_database'); 
+
+	return mongoose;
 }
 
 notify.init = function(mongoHost,MongoPort,Database,Collection){
