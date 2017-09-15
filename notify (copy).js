@@ -66,26 +66,23 @@ notify.restAddLChannel = function(topic, fn){
 	var notifications = require("./notification");
 	console.log("listener channel on rest created")
 	notify.rest.post('/'+topic, function(req, resp){
-		// if(!notifications.collection.find({}, {'notifications': false})){
-		// 	notifications.collection.insert([topic] = {})
-		// }
-		notifications.collection.insert({
-			_id:topic,
-			'notifications':{
-				[Math.floor(Date.now())]:{
-					"Notification": fn(req.body) ,
-					'req':{
-						'method':req.method,
-						'headers':req.headers,
-						'HttpVersion':req.httpVersion,
-						'params':req.params,
-						'query':req.query,
-						'body':req.body
-					}
+		if(!notify.db[topic]){
+			notify.db[topic] = {}
+		}
+		notifications.collection.insert(
+			{
+				_id: Math.floor(Date.now()),
+				'notifications': {
+					"Notification": fn(req.body) ,'req':{
+					'method':req.method,
+					'headers':req.headers,
+					'HttpVersion':req.httpVersion,
+					'params':req.params,
+					'query':req.query,
+					'body':req.body
 				}
 		}
 	})
-
 		resp.status('200').send("success")
 	})
 }
@@ -96,6 +93,7 @@ notify.restAddPChannel = function(topic){
 
 	notify.rest.post('/response/'+topic, function(req, resp){
 		notifications.find({},(err,data) => {
+			console.log("data = ", data);
 	    resp.send(data);
 	  })
 	})
@@ -103,40 +101,31 @@ notify.restAddPChannel = function(topic){
 	notify.rest.post('/response/'+topic + "/:from", function(req, resp){
 		var temp_arr = [];
 
-		notifications.find({},(err,data) => {
-			var result = data.filter(function( obj ) {
-			  return obj._id == topic;
-			});
-			Object.keys(result[0]['notifications']).map((NotificationDate,index)=>{
-				if(NotificationDate >= req.params.from){
-					temp_arr.push(result[0]['notifications'][NotificationDate])
-				}
-				if(index == Object.keys(result[0]['notifications']).length -1){
-					resp.send(temp_arr)
-				}
-			})
 
-	  })
+
+		Object.keys(notify.db[topic]).map((NotificationDate,index)=>{
+			if(NotificationDate >= req.params.from){
+				temp_arr.push(notify.db[topic][NotificationDate])
+			}
+			if(index == Object.keys(notify.db[topic]).length -1){
+				resp.send(temp_arr)
+			}
+		})
 
 	})
 
 	notify.rest.post('/response/'+topic + "/:from"+"/:to", function(req, resp){
 		var temp_arr = [];
 
-		notifications.find({},(err,data) => {
-			var result = data.filter(function( obj ) {
-			  return obj._id == topic;
-			});
-			Object.keys(result[0]['notifications']).map((NotificationDate,index)=>{
-				if(NotificationDate >= req.params.from && NotificationDate <= req.params.to &&  req.params.to > req.params.from){
-					temp_arr.push(result[0]['notifications'][NotificationDate])
-				}
-				if(index == Object.keys(result[0]['notifications']).length -1){
-					resp.send(temp_arr)
-				}
-			})
+		Object.keys(notify.db[topic]).map((NotificationDate,index)=>{
+			if(NotificationDate >= req.params.from && NotificationDate <= req.params.to &&  req.params.to > req.params.from){
+				temp_arr.push(notify.db[topic][NotificationDate])
+			}
+			if(index == Object.keys(notify.db[topic]).length -1){
+				resp.send(temp_arr)
+			}
+		})
 
-	  })
 	})
 }
 
