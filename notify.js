@@ -29,7 +29,7 @@ notify.restServer = function(){
 	app.use(bodyParser.json());
 
 	//support parsing of application/x-www-form-urlencoded post data
-	app.use(bodyParser.urlencoded({ extended: true })); 
+	app.use(bodyParser.urlencoded({ extended: true }));
 
 	app.listen(7000);
 	console.log("rest server started");
@@ -38,7 +38,7 @@ notify.restServer = function(){
 
 notify['create_mongo_connection'] = function(mongoHost,MongoPort,Database,Collection) {
 	var mongoose = require('mongoose');
-	mongoose.connect('mongodb://localhost/my_database'); 
+	mongoose.connect('mongodb://localhost/my_database');
 
 	return mongoose;
 }
@@ -70,7 +70,7 @@ notify.restAddLChannel = function(topic, fn){
 			notify.db[topic] = {}
 		}
 		notify.db[topic][Math.floor(Date.now())] = {
-			"Notification": fn(req.body) , 
+			"Notification": fn(req.body) ,
 			'req':{
 				'method':req.method,
 				'headers':req.headers,
