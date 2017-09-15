@@ -25,21 +25,31 @@ notify.restServer = function(){
 	var express = require("express");
 	var app = express();
 	var bodyParser = require('body-parser');
-	app.use(bodyParser.urlencoded({ extended: false }));
-	app.use(bodyParser.json())
+	//support parsing of application/json type post data
+	app.use(bodyParser.json());
+
+	//support parsing of application/x-www-form-urlencoded post data
+	app.use(bodyParser.urlencoded({ extended: true })); 
+
 	app.listen(7000);
 	console.log("rest server started");
 	return app;
 }
 
-notify.prototype.init = function(argument){
-		notify.prototype.ws = notify.wsServer();
-		notify.prototype.ws['addLChannel'] = notify.wsAddLChannel;
-		notify.prototype.ws['addPChannel'] = notify.wsAddPChannel;
-		notify.prototype.rest = notify.restServer();
-		notify.prototype.rest['addLChannel'] = notify.restAddLChannel;
-		notify.prototype.rest['addPChannel'] = notify.restAddPChannel;
+notify['create_mongo_connection'] = function(mongoHost,MongoPort,Database,Collection) {
+	 
+}
+
+notify.init = function(mongoHost,MongoPort,Database,Collection){
+		notify.ws = notify.wsServer();
+		notify.ws['addLChannel'] = notify.wsAddLChannel;
+		notify.ws['addPChannel'] = notify.wsAddPChannel;
+		notify.rest = notify.restServer();
+		notify.rest['addLChannel'] = notify.restAddLChannel;
+		notify.rest['addPChannel'] = notify.restAddPChannel;
+		notify.mongo = notify.create_mongo_connection(mongoHost,MongoPort,Database,Collection)
 };
+
 
 notify.wsAddLChannel = function(){
 	console.log("listener channel on ws created")
@@ -52,17 +62,21 @@ notify.wsAddPChannel = function(){
 notify.restAddLChannel = function(topic, fn){
 
 	console.log("listener channel on rest created")
-
-	if(!notify['list']['store'][topic]){
-		notify['list']['store'][topic] = []
-	}
-	notify['list']['store'][topic].push(notify.rest)
-
 	notify.rest.post('/'+topic, function(req, resp){
 		if(!notify.db[topic]){
 			notify.db[topic] = {}
 		}
-		notify.db[topic][Math.floor(Date.now())] = {"Notification": fn(req.body) , "req":req}
+		notify.db[topic][Math.floor(Date.now())] = {
+			"Notification": fn(req.body) , 
+			'req':{
+				'method':req.method,
+				'headers':req.headers,
+				'HttpVersion':req.httpVersion,
+				'params':req.params,
+				'query':req.query,
+				'body':req.body
+			}
+		}
 		resp.status('200').send("success")
 	})
 }
@@ -71,36 +85,37 @@ notify.restAddPChannel = function(topic){
 	console.log("Publisher channel on rest created");
 
 	notify.rest.post('/response/'+topic, function(req, resp){
-		resp.json(db[topic])
-	}
+		console.log(notify.db[topic])
+		resp.send(notify.db[topic])
+	})
 
 	notify.rest.post('/response/'+topic + "/:from", function(req, resp){
 		var temp_arr = [];
 
-		Object.keys(db[topic]).map((NotificationDate,index)=>{
+		Object.keys(notify.db[topic]).map((NotificationDate,index)=>{
 			if(NotificationDate >= req.params.from){
-				temp_arr.push(db[topic][NotificationDate])
+				temp_arr.push(notify.db[topic][NotificationDate])
 			}
-			if(index == Object.keys(db[topic]).length -1){
-				resp.json(temp_arr)
+			if(index == Object.keys(notify.db[topic]).length -1){
+				resp.send(temp_arr)
 			}
 		})
 
-	}
+	})
 
 	notify.rest.post('/response/'+topic + "/:from"+"/:to", function(req, resp){
 		var temp_arr = [];
 
-		Object.keys(db[topic]).map((NotificationDate,index)=>{
+		Object.keys(notify.db[topic]).map((NotificationDate,index)=>{
 			if(NotificationDate >= req.params.from && NotificationDate <= req.params.to &&  req.params.to > req.params.from){
-				temp_arr.push(db[topic][NotificationDate])
+				temp_arr.push(notify.db[topic][NotificationDate])
 			}
-			if(index == Object.keys(db[topic]).length -1){
-				resp.json(temp_arr)
+			if(index == Object.keys(notify.db[topic]).length -1){
+				resp.send(temp_arr)
 			}
 		})
 
-	}
+	})
 }
 
 module.exports = notify;
