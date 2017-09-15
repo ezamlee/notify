@@ -64,27 +64,54 @@ notify.wsAddPChannel = function(){
 
 notify.restAddLChannel = function(topic, fn){
 	var notifications = require("./notification");
-	console.log("listener channel on rest created")
+	console.log("listener channel on rest created");
 	notify.rest.post('/'+topic, function(req, resp){
-		// if(!notifications.collection.find({}, {'notifications': false})){
-		// 	notifications.collection.insert([topic] = {})
-		// }
-		notifications.collection.insert({
-			_id:topic,
-			'notifications':{
-				[Math.floor(Date.now())]:{
-					"Notification": fn(req.body) ,
-					'req':{
-						'method':req.method,
-						'headers':req.headers,
-						'HttpVersion':req.httpVersion,
-						'params':req.params,
-						'query':req.query,
-						'body':req.body
-					}
+
+		notifications.find({}, {'notifications': false}, (err,data) => {
+			data.filter(function( obj ) {
+			  if(obj._id != topic){
+					console.log("not found");
+					notifications.collection.insert({
+						_id:topic,
+						'notifications':{
+							[Math.floor(Date.now())]:{
+								"Notification": fn(req.body) ,
+								'req':{
+									'method':req.method,
+									'headers':req.headers,
+									'HttpVersion':req.httpVersion,
+									'params':req.params,
+									'query':req.query,
+									'body':req.body
+								}
+							}
+						}
+					})
 				}
-		}
-	})
+				else {
+					console.log("yessss found");
+					notifications.findOne({ _id: topic }, (err, data)=>{
+						console.log("adta ==", data);
+						var allData = data['notifications'];
+						allData[Math.floor(Date.now())] = {
+							"Notification": fn(req.body) ,
+							'req':{
+								'method':req.method,
+								'headers':req.headers,
+								'HttpVersion':req.httpVersion,
+								'params':req.params,
+								'query':req.query,
+								'body':req.body
+							}
+						}
+						notifications.update({_id: topic}, { $set: { 'notifications': allData }}, (error, result)=>{
+							console.log("done!!!");
+						})
+					})
+
+				}
+			});
+		});
 
 		resp.status('200').send("success")
 	})
