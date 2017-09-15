@@ -1,8 +1,6 @@
-var notifyFN = require("./notify.js")
-var notify =  new notifyFN();
+var notify= require("./notify.js")
 notify.init()
-console.log("notify.prototype.rest",notify.rest);
-
 notify.rest.addLChannel('demo',function() {
-  console.log("heba");
+  return "heba"
 });
+notify.rest.addPChannel('demo')
