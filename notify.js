@@ -21,6 +21,11 @@ notify.wsServer = function(){
 	var app = express();
 	var srvr = app.listen(6000);
 	console.log("ws server started");
+	var app = express();
+	var bodyParser = require('body-parser');
+	//support parsing of application/json type post data
+	app.use(bodyParser.json());
+	//support parsing of application/x-www-form-urlencoded post data
 	var io = require('socket.io').listen(srvr);
 	return io;
 }
@@ -39,7 +44,7 @@ notify.restServer = function(){
 	return app;
 }
 
-notify['create_mongo_connection'] = function(mongoHost,MongoPort,Database,Collection) {
+notify['create_mongo_connection'] = function(mongoHost,MongoPort,Database) {
 	var mongoose = require('mongoose');
 	// mongoose.connect("mongodb://127.0.0.1:27017/NodeProject");
 	var mongoDB = 'mongodb://' + mongoHost + ':'+MongoPort +'/'+ Database;
@@ -47,14 +52,14 @@ notify['create_mongo_connection'] = function(mongoHost,MongoPort,Database,Collec
 
 }
 
-notify.init = function(mongoHost,MongoPort,Database,Collection){
+notify.init = function(mongoHost,MongoPort,Database){
 		notify.ws = notify.wsServer();
 		notify.ws['addLChannel'] = notify.wsAddLChannel;
 		notify.ws['addPChannel'] = notify.wsAddPChannel;
 		notify.rest = notify.restServer();
 		notify.rest['addLChannel'] = notify.restAddLChannel;
 		notify.rest['addPChannel'] = notify.restAddPChannel;
-		notify.mongo = notify.create_mongo_connection(mongoHost,MongoPort,Database,Collection)
+		notify.mongo = notify.create_mongo_connection(mongoHost,MongoPort,Database)
 };
 
 

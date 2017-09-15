@@ -21,5 +21,9 @@
     "qa": "0.0.1",
     "qs": "^6.5.1",
     "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-google": "^0.9.1"
   }
 }
