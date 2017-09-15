@@ -1,3 +1,7 @@
+
+var notifications = require("./notification");
+var topics = require("./topics");
+
 //requrie modules here
 function notify(){
 
@@ -63,55 +67,29 @@ notify.wsAddPChannel = function(){
 }
 
 notify.restAddLChannel = function(topic, fn){
-	var notifications = require("./notification");
 	console.log("listener channel on rest created");
 	notify.rest.post('/'+topic, function(req, resp){
 
-		notifications.find({}, {'notifications': false}, (err,data) => {
-			data.filter(function( obj ) {
-			  if(obj._id != topic){
-					console.log("not found");
-					notifications.collection.insert({
-						_id:topic,
-						'notifications':{
-							[Math.floor(Date.now())]:{
-								"Notification": fn(req.body) ,
-								'req':{
-									'method':req.method,
-									'headers':req.headers,
-									'HttpVersion':req.httpVersion,
-									'params':req.params,
-									'query':req.query,
-									'body':req.body
-								}
-							}
-						}
-					})
-				}
-				else {
-					console.log("yessss found");
-					notifications.findOne({ _id: topic }, (err, data)=>{
-						console.log("adta ==", data);
-						var allData = data['notifications'];
-						allData[Math.floor(Date.now())] = {
-							"Notification": fn(req.body) ,
-							'req':{
-								'method':req.method,
-								'headers':req.headers,
-								'HttpVersion':req.httpVersion,
-								'params':req.params,
-								'query':req.query,
-								'body':req.body
-							}
-						}
-						notifications.update({_id: topic}, { $set: { 'notifications': allData }}, (error, result)=>{
-							console.log("done!!!");
-						})
-					})
+		topics.findOne({'topic': topic}, (err, data)=>{
+			console.log('topic =', data);
+			if (!data) {
+				console.log('! data if condition =', data);
+				topics.collection.insert({'topic': topic});
+			}
+		})
 
-				}
-			});
-		});
+		notifications.collection.insert({
+			'topic': topic,
+			'ts': Math.floor(Date.now()),
+			'notification': fn(req.body),
+			'HttpVersion': String,
+			"params": req.params,
+			"query": req.query,
+			"body": req.body,
+			'method':req.method,
+			'headers':req.headers
+
+		})
 
 		resp.status('200').send("success")
 	})
@@ -119,7 +97,6 @@ notify.restAddLChannel = function(topic, fn){
 
 notify.restAddPChannel = function(topic){
 	console.log("Publisher channel on rest created");
-	var notifications = require("./notification");
 
 	notify.rest.post('/response/'+topic, function(req, resp){
 		notifications.find({},(err,data) => {
@@ -128,42 +105,17 @@ notify.restAddPChannel = function(topic){
 	})
 
 	notify.rest.post('/response/'+topic + "/:from", function(req, resp){
-		var temp_arr = [];
 
-		notifications.find({},(err,data) => {
-			var result = data.filter(function( obj ) {
-			  return obj._id == topic;
-			});
-			Object.keys(result[0]['notifications']).map((NotificationDate,index)=>{
-				if(NotificationDate >= req.params.from){
-					temp_arr.push(result[0]['notifications'][NotificationDate])
-				}
-				if(index == Object.keys(result[0]['notifications']).length -1){
-					resp.send(temp_arr)
-				}
-			})
-
-	  })
+		notifications.find({"ts": {$gte: req.params.from}}, (err, data)=>{
+			resp.send(data);
+		})
 
 	})
 
 	notify.rest.post('/response/'+topic + "/:from"+"/:to", function(req, resp){
-		var temp_arr = [];
-
-		notifications.find({},(err,data) => {
-			var result = data.filter(function( obj ) {
-			  return obj._id == topic;
-			});
-			Object.keys(result[0]['notifications']).map((NotificationDate,index)=>{
-				if(NotificationDate >= req.params.from && NotificationDate <= req.params.to &&  req.params.to > req.params.from){
-					temp_arr.push(result[0]['notifications'][NotificationDate])
-				}
-				if(index == Object.keys(result[0]['notifications']).length -1){
-					resp.send(temp_arr)
-				}
-			})
-
-	  })
+		notifications.find({"ts": {$gte: req.params.from, $lte: req.params.to}}, (err, data)=>{
+			resp.send(data);
+		})
 	})
 }
 
