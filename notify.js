@@ -18,20 +18,18 @@ notify['list'] = {
 notify.wsServer = function(){
 	var app = require('express')();
 	var http = require('http').Server(app);
-	
+
 	var socket = require('socket.io')(http);
 	socket.on('connection', function(socket){
-		console.log("connected");
-		socket.on("set",function(data){	
-			console.log(data.topic)
+		socket.on("set",function(data){
 			socket.join(data.topic)
 		})
 	});
-	
+
 	http.listen(9000, function(){
   		console.log('listening on :9000');
 	});
-	
+
 	return socket;
 }
 
@@ -67,13 +65,31 @@ notify.init = function(mongoHost,MongoPort,Database){
 };
 
 
-notify.wsAddLChannel = function(topic,fn){
+notify.wsAddLChannel = function(){
 	console.log("listener channel on ws created");
-
+	var socket = notify.ws;
+	socket.on('connection', function(socket){
+		socket.on("msg",function(data){
+			socket.join(data.topic)
+			notifications.collection.insert({
+				'topic': data.topic,
+				'ts': Math.floor(Date.now()),
+				'notification': data.topic,
+				// 'socketID': socket.id
+			})
+		})
+	});
 }
 
-notify.wsAddPChannel = function(){
-	console.log("Publisher channel on ws created")
+notify.wsAddPChannel = function(topic){
+	console.log("Publisher channel on ws created");
+	var socket = notify.ws;
+
+	// socket.on("msg",(data)=>{
+	// 	console.log(data)
+	// 	socket.to(data.topic).emit("data.topic", data);
+	// })
+
 }
 
 notify.restAddLChannel = function(topic, fn){
@@ -84,7 +100,6 @@ notify.restAddLChannel = function(topic, fn){
 				topics.collection.insert({'topic': topic});
 			}
 		})
-
 		notifications.collection.insert({
 			'topic': topic,
 			'ts': Math.floor(Date.now()),
@@ -96,7 +111,6 @@ notify.restAddLChannel = function(topic, fn){
 			'method':req.method,
 			'headers':req.headers
 		})
-
 		resp.status('200').send("success")
 	})
 }
