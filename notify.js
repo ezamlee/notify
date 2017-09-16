@@ -16,13 +16,20 @@ notify['list'] = {
 }
 
 notify.wsServer = function(){
-	var express = require("express");
-	var app = express();
-	var srvr = app.listen(6000);
-	console.log("ws server started");
-	var app = express();
-	//application setting
-	var io = require('socket.io').listen(srvr);
+	var app = require('express')();
+	var http = require('http').Server(app);
+	
+
+	var io = require('socket.io')(http);
+	io.on('connection', function(socket){
+  		console.log("inside connection")
+		notify.ws.on('set',function(data){
+			console.log(data)
+		})
+	});
+	http.listen(9000, function(){
+  		console.log('listening on :9000');
+	});
 	return io;
 }
 
@@ -34,7 +41,6 @@ notify.restServer = function(){
 	app.use(bodyParser.json());
 	//support parsing of application/x-www-form-urlencoded post data
 	app.use(bodyParser.urlencoded({ extended: true }));
-
 	app.listen(7000);
 	console.log("rest server started");
 	return app;
@@ -59,16 +65,9 @@ notify.init = function(mongoHost,MongoPort,Database){
 };
 
 
-notify.wsAddLChannel = function(){
+notify.wsAddLChannel = function(topic,fn){
 	console.log("listener channel on ws created");
-	console.log("notify.ws = ", notify.ws);
 
-	notify.ws.on('connection', function (socket) {
-		socket.on('hi', (data)=>{
-			console.log("data ==",data);
-		});
-
-	});
 }
 
 notify.wsAddPChannel = function(){

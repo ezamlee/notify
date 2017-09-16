@@ -3,16 +3,17 @@
 <head>
 	<title>Y</title>
 </head>
-<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js.map"></script> -->
 <body>
 	<h1>Hellow Jaavascripts</h1>
 </body>
+
 <script>
-	const socket = io.connect('http://localhost:6000')
-	console.log("socket = ",socket);
-	socket.emit('hi', 'everyone');
-	socket.on('hi', function(data){
-		console.log("hi =", data);
-	})
+  var socket = io('http://localhost:9000');
+  socket.on('connect', function (data) {
+    console.log(data);
+  });
 </script>
 </html>
