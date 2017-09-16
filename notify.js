@@ -59,10 +59,15 @@ notify.init = function(mongoHost,MongoPort,Database){
 };
 
 
-notify.wsAddLChannel = function(topic, fn){
+notify.wsAddLChannel = function(){
 	console.log("listener channel on ws created");
+	console.log("notify.ws = ", notify.ws);
+
 	notify.ws.on('connection', function (socket) {
-		console.log("socket = ", socket);
+		socket.on('hi', (data)=>{
+			console.log("data ==",data);
+		});
+
 	});
 }
 

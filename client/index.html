@@ -9,6 +9,10 @@
 </body>
 <script>
 	const socket = io.connect('http://localhost:6000')
-	console.log(socket);
+	console.log("socket = ",socket);
+	socket.emit('hi', 'everyone');
+	socket.on('hi', function(data){
+		console.log("hi =", data);
+	})
 </script>
 </html>
