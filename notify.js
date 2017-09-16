@@ -1,4 +1,3 @@
-
 var notifications = require("./notification");
 var topics = require("./topics");
 
@@ -93,7 +92,6 @@ notify.restAddLChannel = function(topic, fn){
 			"body": req.body,
 			'method':req.method,
 			'headers':req.headers
-
 		})
 
 		resp.status('200').send("success")
