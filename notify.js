@@ -22,10 +22,12 @@ notify.wsServer = function(){
 	var srvr = app.listen(6000);
 	console.log("ws server started");
 	var app = express();
-	var bodyParser = require('body-parser');
-	//support parsing of application/json type post data
-	app.use(bodyParser.json());
-	//support parsing of application/x-www-form-urlencoded post data
+	//application setting
+	app.set("view engine", "ejs");
+	app.set("views", "./views");
+	app.get("/",function(req,resp){
+		resp.render("index");
+	})
 	var io = require('socket.io').listen(srvr);
 	return io;
 }
@@ -63,8 +65,11 @@ notify.init = function(mongoHost,MongoPort,Database){
 };
 
 
-notify.wsAddLChannel = function(){
-	console.log("listener channel on ws created")
+notify.wsAddLChannel = function(topic, fn){
+	console.log("listener channel on ws created");
+	notify.ws.on('connection', function (socket) {
+		console.log("socket = ", socket);
+	});
 }
 
 notify.wsAddPChannel = function(){
@@ -74,11 +79,8 @@ notify.wsAddPChannel = function(){
 notify.restAddLChannel = function(topic, fn){
 	console.log("listener channel on rest created");
 	notify.rest.post('/'+topic, function(req, resp){
-
 		topics.findOne({'topic': topic}, (err, data)=>{
-			console.log('topic =', data);
 			if (!data) {
-				console.log('! data if condition =', data);
 				topics.collection.insert({'topic': topic});
 			}
 		})
