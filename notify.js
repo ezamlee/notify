@@ -23,11 +23,6 @@ notify.wsServer = function(){
 	console.log("ws server started");
 	var app = express();
 	//application setting
-	app.set("view engine", "ejs");
-	app.set("views", "./views");
-	app.get("/",function(req,resp){
-		resp.render("index");
-	})
 	var io = require('socket.io').listen(srvr);
 	return io;
 }
