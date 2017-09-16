@@ -14,7 +14,7 @@
   var socket = io('http://localhost:9000');
   socket.on('connect', function (data) {
     socket.emit("set",{"topic":"heba"});
-		socket.emit("msg",{"topic":"javascript"});
+		socket.emit("msg",{"topic":"java", 'notification': 'notifications from javascript'});
 
   });
 </script>

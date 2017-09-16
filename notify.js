@@ -22,6 +22,7 @@ notify.wsServer = function(){
 	var socket = require('socket.io')(http);
 	socket.on('connection', function(socket){
 		socket.on("set",function(data){
+			console.log("dataaa=", data);
 			socket.join(data.topic)
 		})
 	});
@@ -64,19 +65,23 @@ notify.init = function(mongoHost,MongoPort,Database){
 		notify.mongo = notify.create_mongo_connection(mongoHost,MongoPort,Database)
 };
 
+notify.applyOnTopic={}
 
-notify.wsAddLChannel = function(){
+notify.wsAddLChannel = function(topic, fn){
+	notify.applyOnTopic.topic = fn
 	console.log("listener channel on ws created");
 	var socket = notify.ws;
+
 	socket.on('connection', function(socket){
+		console.log("connection");
 		socket.on("msg",function(data){
-			socket.join(data.topic)
+			console.log("listener data = " , data);
 			notifications.collection.insert({
-				'topic': data.topic,
+				'topic': topic,
 				'ts': Math.floor(Date.now()),
-				'notification': data.topic,
-				// 'socketID': socket.id
+				'notification': fn(data.notification)
 			})
+			socket.to(topic).emit('publisher', fn(data.notification))
 		})
 	});
 }
@@ -84,7 +89,6 @@ notify.wsAddLChannel = function(){
 notify.wsAddPChannel = function(topic){
 	console.log("Publisher channel on ws created");
 	var socket = notify.ws;
-
 	// socket.on("msg",(data)=>{
 	// 	console.log(data)
 	// 	socket.to(data.topic).emit("data.topic", data);
