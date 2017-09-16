@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Y</title>
 </head>
-<script type="text/javascript" src="socket.io/socket.io.js"></script>
-<!-- <script src="./socket.io.js"></script> -->
-<script type="text/javascript">
-		var socket = io.connect('http://localhost:3000');
-
-</script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
 <body>
 	<h1>Hellow Jaavascripts</h1>
 </body>
+<script>
+	const socket = io.connect('http://localhost:6000')
+	console.log(socket);
+</script>
 </html>
