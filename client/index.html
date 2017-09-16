@@ -13,7 +13,7 @@
 <script>
   var socket = io('http://localhost:9000');
   socket.on('connect', function (data) {
-    console.log(data);
-  });
+    socket.emit("set",{"topic":"heba"});
+  }); 
 </script>
 </html>

@@ -19,18 +19,20 @@ notify.wsServer = function(){
 	var app = require('express')();
 	var http = require('http').Server(app);
 	
-
-	var io = require('socket.io')(http);
-	io.on('connection', function(socket){
-  		console.log("inside connection")
-		notify.ws.on('set',function(data){
-			console.log(data)
+	var socket = require('socket.io')(http);
+	socket.on('connection', function(socket){
+		console.log("connected");
+		socket.on("set",function(data){	
+			console.log(data.topic)
+			socket.join(data.topic)
 		})
 	});
+	
 	http.listen(9000, function(){
   		console.log('listening on :9000');
 	});
-	return io;
+	
+	return socket;
 }
 
 notify.restServer = function(){
