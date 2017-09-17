@@ -91,23 +91,22 @@ notify.wsAddPChannel = function(topic){
 		socket.on("publisher",(data)=>{
 			console.log("essam publisher channel");
 			if (data.topic && data.from == undefined && data.to == undefined) {
-
 				console.log("topic only", data)
-				notifications.find({'topic': topic},(err,data) => {
+				notifications.find({'topic': data.topic},(err,data) => {
 					console.log("output = ", data);
 			    socket.to(data.topic).emit("data.topic", data);
 			  })
 			}
 			else if (data.topic && data.from != undefined && data.to == undefined) {
 				console.log("topic , from", data)
-				notifications.find({"ts": {$gte: data.from}}, (err, data)=>{
+				notifications.find({'topic': data.topic, "ts": {$gte: data.from}}, (err, data)=>{
 					console.log("output = ", data);
 					socket.to(data.topic).emit("data.topic", data);
 				})
 			}
 			else if (data.topic && data.from != undefined && data.to != undefined) {
 				console.log("topic , from , to", data)
-				notifications.find({"ts": {$gte: data.from, $lte: data.to}}, (err, data)=>{
+				notifications.find({'topic': data.topic,"ts": {$gte: data.from, $lte: data.to}}, (err, data)=>{
 					console.log("output = ", data);
 					socket.to(data.topic).emit("data.topic", data);
 				})
