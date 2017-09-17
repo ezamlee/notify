@@ -23,8 +23,12 @@ notify.wsServer = function(){
 
 	var socket = require('socket.io')(http);
 	socket.on('connection', function(socket){
+
 		socket.on("set",function(data){
-			socket.join(data.topic)
+			socket.join(data.topic,function(){
+				console.log("socket joined a room")
+			})
+			socket.to(data.topic).emit('join',"user joined")
 		})
 	});
 
@@ -56,15 +60,7 @@ notify['create_mongo_connection'] = function(mongoHost,MongoPort,Database) {
 
 }
 
-notify.init = function(mongoHost,MongoPort,Database){
-		notify.ws = notify.wsServer();
-		notify.ws['addLChannel'] = notify.wsAddLChannel;
-		notify.ws['addPChannel'] = notify.wsAddPChannel;
-		notify.rest = notify.restServer();
-		notify.rest['addLChannel'] = notify.restAddLChannel;
-		notify.rest['addPChannel'] = notify.restAddPChannel;
-		notify.mongo = notify.create_mongo_connection(mongoHost,MongoPort,Database)
-};
+
 
 
 notify.wsAddLChannel = function(topic, fn){
@@ -73,13 +69,13 @@ notify.wsAddLChannel = function(topic, fn){
 	var socket = notify.ws;
 
 	socket.on('connection', function(socket){
-		socket.on("msg",function(data){
+		socket.on("listner",function(data){
 			notifications.collection.insert({
 				'topic': data.topic,
 				'ts': Math.floor(Date.now()),
 				'notification': notify.applyOnTopic[data.topic](data.notification)
 			})
-			socket.to(data.topic).emit('publisher', notify.applyOnTopic[data.topic](data.notification))
+			socket.to(data.topic).emit('serverpublisher', notify.applyOnTopic[data.topic](data.notification))
 		})
 	});
 }
@@ -88,11 +84,10 @@ notify.wsAddPChannel = function(topic){
 	console.log("Publisher channel on ws created");
 	var socket = notify.ws;
 	socket.on('connection', function(socket){
-
-		socket.on('publisher', (data)=>{
+		socket.on('clientpublisher', function(data){
 			if (data.topic && data.from == undefined && data.to == undefined) {
-				notifications.find({'topic': data.topic},(err,data) => {
-					socket.emit('response', data);
+				notifications.find({'topic': data.topic},(err,data2) => {
+					socket.emit('response', data2);
 			  })
 			}
 			else if (data.topic && data.from != undefined && data.to == undefined) {
@@ -153,5 +148,13 @@ notify.restAddPChannel = function(topic){
 		})
 	})
 }
-
+notify.init = function(mongoHost,MongoPort,Database){
+		notify.ws = notify.wsServer();
+		notify.ws['addLChannel'] = notify.wsAddLChannel;
+		notify.ws['addPChannel'] = notify.wsAddPChannel;
+		notify.rest = notify.restServer();
+		notify.rest['addLChannel'] = notify.restAddLChannel;
+		notify.rest['addPChannel'] = notify.restAddPChannel;
+		notify.mongo = notify.create_mongo_connection(mongoHost,MongoPort,Database)
+};
 module.exports = notify;
