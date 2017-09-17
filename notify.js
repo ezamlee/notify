@@ -69,12 +69,10 @@ notify.init = function(mongoHost,MongoPort,Database){
 
 notify.wsAddLChannel = function(topic, fn){
 	notify.applyOnTopic[topic] = fn
-	console.log("fn = ", fn);
 	console.log("listener channel on ws created");
 	var socket = notify.ws;
 
 	socket.on('connection', function(socket){
-		console.log("connection");
 		socket.on("msg",function(data){
 			notifications.collection.insert({
 				'topic': data.topic,
@@ -90,33 +88,24 @@ notify.wsAddPChannel = function(topic){
 	console.log("Publisher channel on ws created");
 	var socket = notify.ws;
 	socket.on('connection', function(socket){
-		//data=> {topic, from, to}
-		socket.on("publisher",(data)=>{
-			console.log("essam publisher channel");
+
+		socket.on('publisher', (data)=>{
 			if (data.topic && data.from == undefined && data.to == undefined) {
-				console.log("topic only", data)
 				notifications.find({'topic': data.topic},(err,data) => {
-					console.log("output = ", data);
-					console.log("socket id =", socket.id);
-			    socket.to(socket.id).emit("response", data);
+					socket.emit('response', data);
 			  })
 			}
 			else if (data.topic && data.from != undefined && data.to == undefined) {
-				console.log("topic , from", data)
 				notifications.find({'topic': data.topic, "ts": {$gte: data.from}}, (err, data)=>{
-					console.log("output = ", data);
-					socket.to(socket.id).emit("response", data);
+					socket.emit("response", data);
 				})
 			}
 			else if (data.topic && data.from != undefined && data.to != undefined) {
-				console.log("topic , from , to", data)
 				notifications.find({'topic': data.topic,"ts": {$gte: data.from, $lte: data.to}}, (err, data)=>{
-					console.log("output = ", data);
-					socket.to(socket.id).emit("response", data);
+					socket.emit("response", data);
 				})
 			}
-
-		})
+	  })
 	})
 }
 
