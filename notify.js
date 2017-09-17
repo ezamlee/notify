@@ -15,6 +15,8 @@ notify['list'] = {
 	}
 }
 
+notify.applyOnTopic={}
+
 notify.wsServer = function(){
 	var app = require('express')();
 	var http = require('http').Server(app);
@@ -64,21 +66,20 @@ notify.init = function(mongoHost,MongoPort,Database){
 		notify.mongo = notify.create_mongo_connection(mongoHost,MongoPort,Database)
 };
 
-notify.applyOnTopic={}
 
 notify.wsAddLChannel = function(topic, fn){
-	notify.applyOnTopic.topic = fn
+	notify.applyOnTopic[topic] = fn
 	console.log("listener channel on ws created");
 	var socket = notify.ws;
 
 	socket.on('connection', function(socket){
 		socket.on("msg",function(data){
 			notifications.collection.insert({
-				'topic': topic,
+				'topic': data.topic,
 				'ts': Math.floor(Date.now()),
-				'notification': fn(data.notification)
+				'notification': notify.applyOnTopic[data.topic](data.notification)
 			})
-			socket.to(topic).emit('publisher', fn(data.notification))
+			socket.to(topic).emit('publisher', notify.applyOnTopic[data.topic](data.notification))
 		})
 	});
 }
