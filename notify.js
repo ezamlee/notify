@@ -150,14 +150,14 @@ notify.restAddPChannel = function(topic){
 
 	notify.rest.post('/response/'+topic + "/:from", function(req, resp){
 
-		notifications.find({"ts": {$gte: req.params.from}}, (err, data)=>{
+		notifications.find({'topic': topic,"ts": {$gte: req.params.from}}, (err, data)=>{
 			resp.send(data);
 		})
 
 	})
 
 	notify.rest.post('/response/'+topic + "/:from"+"/:to", function(req, resp){
-		notifications.find({"ts": {$gte: req.params.from, $lte: req.params.to}}, (err, data)=>{
+		notifications.find({'topic': topic, "ts": {$gte: req.params.from, $lte: req.params.to}}, (err, data)=>{
 			resp.send(data);
 		})
 	})
