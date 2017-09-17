@@ -22,7 +22,6 @@ notify.wsServer = function(){
 	var socket = require('socket.io')(http);
 	socket.on('connection', function(socket){
 		socket.on("set",function(data){
-			console.log("dataaa=", data);
 			socket.join(data.topic)
 		})
 	});
@@ -73,9 +72,7 @@ notify.wsAddLChannel = function(topic, fn){
 	var socket = notify.ws;
 
 	socket.on('connection', function(socket){
-		console.log("connection");
 		socket.on("msg",function(data){
-			console.log("listener data = " , data);
 			notifications.collection.insert({
 				'topic': topic,
 				'ts': Math.floor(Date.now()),
@@ -89,11 +86,35 @@ notify.wsAddLChannel = function(topic, fn){
 notify.wsAddPChannel = function(topic){
 	console.log("Publisher channel on ws created");
 	var socket = notify.ws;
-	// socket.on("msg",(data)=>{
-	// 	console.log(data)
-	// 	socket.to(data.topic).emit("data.topic", data);
-	// })
+	socket.on('connection', function(socket){
+		//data=> {topic, from, to}
+		socket.on("publisher",(data)=>{
+			console.log("essam publisher channel");
+			if (data.topic && data.from == undefined && data.to == undefined) {
 
+				console.log("topic only", data)
+				notifications.find({'topic': topic},(err,data) => {
+					console.log("output = ", data);
+			    socket.to(data.topic).emit("data.topic", data);
+			  })
+			}
+			else if (data.topic && data.from != undefined && data.to == undefined) {
+				console.log("topic , from", data)
+				notifications.find({"ts": {$gte: data.from}}, (err, data)=>{
+					console.log("output = ", data);
+					socket.to(data.topic).emit("data.topic", data);
+				})
+			}
+			else if (data.topic && data.from != undefined && data.to != undefined) {
+				console.log("topic , from , to", data)
+				notifications.find({"ts": {$gte: data.from, $lte: data.to}}, (err, data)=>{
+					console.log("output = ", data);
+					socket.to(data.topic).emit("data.topic", data);
+				})
+			}
+
+		})
+	})
 }
 
 notify.restAddLChannel = function(topic, fn){
