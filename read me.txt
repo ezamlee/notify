@@ -1,0 +1,21 @@
+MW3 - Agnostic Notification Server
+
+Objective :
+
+- To Have a robust , scalable , extensible agnostic notification server that can handle all types of Presentation protocols built on top of TCP such as HTTP , WebSocket and MQTT.
+
+Terms:
+
+1- Notification Channel : Each notification must belong to a channel. Each channel have a listener and a publisher on the server.
+
+2- Listner : A Listner is a simple entity that accepts Msg from a specific client.
+
+3- Publisher : Publish and retrieve needed Notification on specific topic.
+
+Features :
+
+1- Ability to add a Notification Channel.
+2- Highly Customaziable Operation can be run on each notification/Channel to enrich data.
+3- De-coubling Notification from protocol for ease of use.
+4- Notification presistant and easily retrivable.
+
