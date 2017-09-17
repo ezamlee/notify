@@ -69,17 +69,19 @@ notify.init = function(mongoHost,MongoPort,Database){
 
 notify.wsAddLChannel = function(topic, fn){
 	notify.applyOnTopic[topic] = fn
+	console.log("fn = ", fn);
 	console.log("listener channel on ws created");
 	var socket = notify.ws;
 
 	socket.on('connection', function(socket){
+		console.log("connection");
 		socket.on("msg",function(data){
 			notifications.collection.insert({
 				'topic': data.topic,
 				'ts': Math.floor(Date.now()),
 				'notification': notify.applyOnTopic[data.topic](data.notification)
 			})
-			socket.to(topic).emit('publisher', notify.applyOnTopic[data.topic](data.notification))
+			socket.to(data.topic).emit('publisher', notify.applyOnTopic[data.topic](data.notification))
 		})
 	});
 }
@@ -95,21 +97,22 @@ notify.wsAddPChannel = function(topic){
 				console.log("topic only", data)
 				notifications.find({'topic': data.topic},(err,data) => {
 					console.log("output = ", data);
-			    socket.to(data.topic).emit("data.topic", data);
+					console.log("socket id =", socket.id);
+			    socket.to(socket.id).emit("response", data);
 			  })
 			}
 			else if (data.topic && data.from != undefined && data.to == undefined) {
 				console.log("topic , from", data)
 				notifications.find({'topic': data.topic, "ts": {$gte: data.from}}, (err, data)=>{
 					console.log("output = ", data);
-					socket.to(data.topic).emit("data.topic", data);
+					socket.to(socket.id).emit("response", data);
 				})
 			}
 			else if (data.topic && data.from != undefined && data.to != undefined) {
 				console.log("topic , from , to", data)
 				notifications.find({'topic': data.topic,"ts": {$gte: data.from, $lte: data.to}}, (err, data)=>{
 					console.log("output = ", data);
-					socket.to(data.topic).emit("data.topic", data);
+					socket.to(socket.id).emit("response", data);
 				})
 			}
 
@@ -129,7 +132,6 @@ notify.restAddLChannel = function(topic, fn){
 			'topic': topic,
 			'ts': Math.floor(Date.now()),
 			'notification': fn(req.body),
-			'HttpVersion': String,
 			"params": req.params,
 			"query": req.query,
 			"body": req.body,
@@ -150,7 +152,6 @@ notify.restAddPChannel = function(topic){
 	})
 
 	notify.rest.post('/response/'+topic + "/:from", function(req, resp){
-
 		notifications.find({'topic': topic,"ts": {$gte: req.params.from}}, (err, data)=>{
 			resp.send(data);
 		})
