@@ -3,7 +3,7 @@
 <head>
 	<title>Y</title>
 </head>
-<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script src="http://localhost:10000/socket.io/socket.io.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js.map"></script> -->
 <body>
@@ -13,12 +13,13 @@
 <script>
   var socket = io('http://localhost:9000');
   socket.on('connect', function (data) {
+  	console.log("data")
     socket.emit("set",{"topic":"heba"});
-		socket.emit("msg",{"topic":"javascript", 'notification': 'from javascript'});
-		socket.emit("publisher",{"topic":"javascript"});
-		socket.on("response", (data)=>{
-			console.log("response = ",data);
-		})
+	socket.emit("msg",{"topic":"javascript", 'notification': 'from javascript'});
+	socket.emit("publisher",{"topic":"javascript"});
+	socket.on("response", (data)=>{
+		console.log("response = ",data);
+	})
   });
 </script>
 </html>
