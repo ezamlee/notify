@@ -122,6 +122,7 @@ notify.restAddLChannel = function(topic, fn){
 			'method':req.method,
 			'headers':req.headers
 		})
+		notify.ws.to(data.topic).emit('serverpublisher', fn(req.body))
 		resp.status('200').send("success")
 	})
 }
@@ -129,21 +130,21 @@ notify.restAddLChannel = function(topic, fn){
 notify.restAddPChannel = function(topic){
 	console.log("Publisher channel on rest created");
 
-	notify.rest.post('/response/'+topic, function(req, resp){
-		notifications.find({},(err,data) => {
+	notify.rest.post(`/response/`+topic, function(req, resp){
+		notifications.find({'topic':topic},(err,data) => {
 	    resp.send(data);
 	  })
 	})
 
-	notify.rest.post('/response/'+topic + "/:from", function(req, resp){
-		notifications.find({'topic': topic,"ts": {$gte: req.params.from}}, (err, data)=>{
+	notify.rest.post(`/response/`+topic + "/:from", function(req, resp){
+		notifications.find({'topic':topic,"ts": {$gte: req.params.from}}, (err, data)=>{
 			resp.send(data);
 		})
 
 	})
 
-	notify.rest.post('/response/'+topic + "/:from"+"/:to", function(req, resp){
-		notifications.find({'topic': topic, "ts": {$gte: req.params.from, $lte: req.params.to}}, (err, data)=>{
+	notify.rest.post(`/response/`+topic + "/:from"+"/:to", function(req, resp){
+		notifications.find({'topic':topic, "ts": {$gte: req.params.from, $lte: req.params.to}}, (err, data)=>{
 			resp.send(data);
 		})
 	})
