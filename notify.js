@@ -107,6 +107,7 @@ notify.wsAddPChannel = function(topic){
 notify.restAddLChannel = function(topic, fn){
 	console.log("listener channel on rest created");
 	notify.rest.post('/'+topic, function(req, resp){
+		console.log(topic)
 		topics.findOne({'topic': topic}, (err, data)=>{
 			if (!data) {
 				topics.collection.insert({'topic': topic});
@@ -122,7 +123,7 @@ notify.restAddLChannel = function(topic, fn){
 			'method':req.method,
 			'headers':req.headers
 		})
-		notify.ws.to(data.topic).emit('serverpublisher', fn(req.body))
+		notify.ws.to(topic).emit('serverpublisher', fn(req.body))
 		resp.status('200').send("success")
 	})
 }
