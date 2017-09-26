@@ -26,14 +26,12 @@ notify.wsServer = function(){
 
 		socket.on("set",function(data){
 			socket.join(data.topic,function(){
-				console.log("socket joined a room")
 			})
 			socket.to(data.topic).emit('join',"user joined")
 		})
 	});
 
 	http.listen(9000, function(){
-  		console.log('listening on :9000');
 	});
 
 	return socket;
@@ -48,7 +46,6 @@ notify.restServer = function(){
 	//support parsing of application/x-www-form-urlencoded post data
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.listen(7000);
-	console.log("rest server started");
 	return app;
 }
 
@@ -57,15 +54,9 @@ notify['create_mongo_connection'] = function(mongoHost,MongoPort,Database) {
 	// mongoose.connect("mongodb://127.0.0.1:27017/NodeProject");
 	var mongoDB = 'mongodb://' + mongoHost + ':'+MongoPort +'/'+ Database;
 	mongoose.connect(mongoDB);
-
 }
-
-
-
-
 notify.wsAddLChannel = function(topic, fn){
 	notify.applyOnTopic[topic] = fn
-	console.log("listener channel on ws created");
 	var socket = notify.ws;
 
 	socket.on('connection', function(socket){
@@ -79,9 +70,7 @@ notify.wsAddLChannel = function(topic, fn){
 		})
 	});
 }
-
 notify.wsAddPChannel = function(topic){
-	console.log("Publisher channel on ws created");
 	var socket = notify.ws;
 	socket.on('connection', function(socket){
 		socket.on('clientpublisher', function(data){
@@ -103,11 +92,8 @@ notify.wsAddPChannel = function(topic){
 	  })
 	})
 }
-
 notify.restAddLChannel = function(topic, fn){
-	console.log("listener channel on rest created");
 	notify.rest.post('/'+topic, function(req, resp){
-		console.log(topic)
 		topics.findOne({'topic': topic}, (err, data)=>{
 			if (!data) {
 				topics.collection.insert({'topic': topic});
@@ -127,10 +113,7 @@ notify.restAddLChannel = function(topic, fn){
 		resp.status('200').send("success")
 	})
 }
-
 notify.restAddPChannel = function(topic){
-	console.log("Publisher channel on rest created");
-
 	notify.rest.post(`/response/`+topic, function(req, resp){
 		notifications.find({'topic':topic},(err,data) => {
 	    resp.send(data);
@@ -159,4 +142,10 @@ notify.init = function(mongoHost,MongoPort,Database){
 		notify.rest['addPChannel'] = notify.restAddPChannel;
 		notify.mongo = notify.create_mongo_connection(mongoHost,MongoPort,Database)
 };
+notify.make=function(channel,fn){
+	notify.ws.addLChannel(channel, fn)
+	notify.ws.addPChannel(channel)
+	notify.rest.addPChannel(channel)
+	notify.rest.addLChannel(channel, fn)
+}
 module.exports = notify;
