@@ -14,6 +14,7 @@ app.post("/register/:channel",function(req,resp){
 
 app.post("/reg/:user",function(req,resp){
 	notify.make(req.params.user,function(data){
+		notify.ws.broadcast.emit("update user" , {"msg":"new room avaliable"})
 		return data.room
 	});
 	resp.send("success")
