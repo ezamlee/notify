@@ -32,7 +32,7 @@ notify.wsServer = function(){
 			}
 		})
 		socket.on("castUp",function(data){
-			socket.broadcast.emit("castDo",data)
+			socket.emit("castDo",{"action": "update_rooms"})
 		})
 	});
 
