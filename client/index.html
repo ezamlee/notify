@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Y</title>
+</head>
+<script src="http://localhost:10000/socket.io/socket.io.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js.map"></script> -->
+<body>
+	<h1>Hellow Jaavascripts</h1>
+	<button onclick="sendme()">Click</button>
+</body>
+
+<script>
+  var socket = io('http://18.220.223.50:9000');
+  socket.on('connect', function (data) {
+  	console.log("connected")
+    socket.emit("set",{"topic":"javascript"});
+	socket.emit("listner",{"topic":"javascript", 'notification': 'Hi javascript'});
+	socket.emit("publisher",{"topic":"javascript"});
+	socket.on("join",function(data){
+		console.log(data)
+	})
+
+	socket.on("update user", function(data){
+		console.log("update users", data)
+	})
+
+	socket.on("serverpublisher",function(data){
+		console.log("server instant msg",data)
+	})
+	console.log("server id",socket.id)
+	socket.on("response",function(data){
+		console.log("server query reply",data)
+	})
+  });
+
+  function sendme(){
+  	socket.emit("clientpublisher" , {topic:"javascript",to:undefined,from:undefined,id:socket.id})
+  }
+</script>
+</html>
