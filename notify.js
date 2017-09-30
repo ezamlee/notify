@@ -39,8 +39,10 @@ notify.wsServer = function(){
 
 notify.restServer = function(){
 	var express = require("express");
+	var cors = require('cors');
 	var app = express();
 	var bodyParser = require('body-parser');
+	app.use(cors());
 	//support parsing of application/json type post data
 	app.use(bodyParser.json());
 	//support parsing of application/x-www-form-urlencoded post data
