@@ -1,5 +1,7 @@
 var express = require("express");
+var cors = require('cors');
 var app = express();
+app.use(cors());
 var bodyParser = require('body-parser');
 let notify = require('./notify.js');
 notify.init('127.0.0.1', '27017', 'newDB')
@@ -19,5 +21,6 @@ app.post("/reg/:user",function(req,resp){
 	});
 	resp.send("success")
 })
+
 // notify.ws.addPChannel('javascript');
 // notify.ws.addPChannel('Bootstrap');
