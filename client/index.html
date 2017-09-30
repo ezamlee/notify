@@ -12,7 +12,7 @@
 </body>
 
 <script>
-  var socket = io('http://localhost:9000');
+  var socket = io('http://18.220.223.50:9000');
   socket.on('connect', function (data) {
   	console.log("connected")
     socket.emit("set",{"topic":"javascript"});
@@ -21,6 +21,11 @@
 	socket.on("join",function(data){
 		console.log(data)
 	})
+
+	socket.on("update user", function(data){
+		console.log("update users", data)
+	})
+
 	socket.on("serverpublisher",function(data){
 		console.log("server instant msg",data)
 	})

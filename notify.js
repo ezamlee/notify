@@ -44,7 +44,11 @@ notify.wsServer = function(){
 
 notify.restServer = function(){
 	var express = require("express");
-	var app = express();
+	var cors = require('cors')
+	var app = express()
+	 
+	app.use(cors())
+	
 	var bodyParser = require('body-parser');
 	//support parsing of application/json type post data
 	app.use(bodyParser.json());
@@ -71,7 +75,11 @@ notify.wsAddLChannel = function(topic, fn){
 				'ts': Math.floor(Date.now()),
 				'notification': notify.applyOnTopic[data.topic](data.notification)
 			})
-			socket.to(data.topic).emit('serverpublisher', notify.applyOnTopic[data.topic](data.notification))
+			socket.to(data.topic).emit('serverpublisher',{
+				'topic': data.topic,
+				'ts': Math.floor(Date.now()),
+				'notification': notify.applyOnTopic[data.topic](data.notification)
+			})
 		})
 	});
 }
@@ -98,6 +106,9 @@ notify.wsAddPChannel = function(topic){
 	})
 }
 notify.restAddLChannel = function(topic, fn){
+
+	notify.rest.use(cors())
+
 	notify.rest.post('/'+topic, function(req, resp){
 		topics.findOne({'topic': topic}, (err, data)=>{
 			if (!data) {
@@ -125,6 +136,7 @@ notify.restAddPChannel = function(topic){
 	  })
 	})
 
+
 	notify.rest.post(`/response/`+topic + "/:from", function(req, resp){
 		notifications.find({'topic':topic,"ts": {$gte: req.params.from}}, (err, data)=>{
 			resp.send(data);
@@ -138,6 +150,7 @@ notify.restAddPChannel = function(topic){
 		})
 	})
 }
+
 notify.init = function(mongoHost,MongoPort,Database){
 		notify.ws = notify.wsServer();
 		notify.ws['addLChannel'] = notify.wsAddLChannel;
