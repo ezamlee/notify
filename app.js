@@ -7,28 +7,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.listen(13456);
 
-
-
-app.get("/register/:channel",function(req,resp){
-	notify.ws.addLChannel(req.params.channel, function (data) {
-	  return data;
-	})
-	notify.ws.addPChannel(req.params.channel, function (data) {
-	  return data;
-	})
-	notify.rest.addLChannel(req.params.channel, function (data) {
-	  return data;
-	})
-	notify.rest.addPChannel(req.params.channel, function (data) {
-	  return data;
-	})
+app.post("/register/:channel",function(req,resp){
+	notify.make(req.params.channel,eval("(" + req.body.fn + ")"));
 	resp.send("success")
 })
 
-
-
-
-
+app.post("/reg/:user",function(req,resp){
+	notify.make(req.params.user,function(data){
+		notify.ws.broadcast.emit("update user" , {"msg":"new room avaliable"})
+		return data.room
+	});
+	resp.send("success")
+})
 
 // notify.ws.addPChannel('javascript');
 // notify.ws.addPChannel('Bootstrap');
