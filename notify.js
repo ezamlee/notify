@@ -136,7 +136,6 @@ notify.restAddPChannel = function(topic){
 		notifications.find({'topic':topic,"ts": {$gte: req.params.from}}, (err, data)=>{
 			resp.send(data);
 		})
-
 	})
 
 	notify.rest.post(`/response/`+topic + "/:from"+"/:to", function(req, resp){
