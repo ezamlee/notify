@@ -25,10 +25,15 @@ notify.wsServer = function(){
 	socket.on('connection', function(socket){
 
 		socket.on("set",function(data){
-			socket.join(data.topic,function(){
-			})
-			socket.to(data.topic).emit('join',"user joined")
+			if(data.topics.length > 0){
+				data.topics.foreach((topic)=>{
+					socket.join(topic)
+				})
+			}
 		})
+		socket.on("castUp",function(data){
+			socket.broadcast.emit("castDo",{"action":"update_rooms"})
+		})1
 	});
 
 	http.listen(9000, function(){
