@@ -105,8 +105,6 @@ notify.wsAddPChannel = function(topic){
 }
 notify.restAddLChannel = function(topic, fn){
 
-	notify.rest.use(cors())
-
 	notify.rest.post('/'+topic, function(req, resp){
 		topics.findOne({'topic': topic}, (err, data)=>{
 			if (!data) {
