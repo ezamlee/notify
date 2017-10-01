@@ -25,7 +25,7 @@ notify.wsServer = function(){
 	socket.on('connection', function(socket){
 
 		socket.on("set",function(data){
-			if(data.topics.length > 0){
+			if(data.topics && data.topics.constructor === Array && data.topics.length > 0){
 				data.topics.foreach((topic)=>{
 					socket.join(topic)
 				})
@@ -33,7 +33,7 @@ notify.wsServer = function(){
 		})
 		socket.on("castUp",function(data){
 			socket.broadcast.emit("castDo",{"action":"update_rooms"})
-		})1
+		})
 	});
 
 	http.listen(9000, function(){
