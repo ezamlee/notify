@@ -32,13 +32,12 @@ notify.wsServer = function(){
 			}
 		})
 		socket.on("castUp",function(data){
+
 			socket.broadcast.emit("castDo",{"action":"update_rooms"})
 		})
 	});
 
-	http.listen(9000, function(){
-	});
-
+	http.listen(9000)
 	return socket;
 }
 
@@ -107,8 +106,6 @@ notify.wsAddPChannel = function(topic){
 }
 notify.restAddLChannel = function(topic, fn){
 
-	notify.rest.use(cors())
-
 	notify.rest.post('/'+topic, function(req, resp){
 		topics.findOne({'topic': topic}, (err, data)=>{
 			if (!data) {
@@ -141,7 +138,6 @@ notify.restAddPChannel = function(topic){
 		notifications.find({'topic':topic,"ts": {$gte: req.params.from}}, (err, data)=>{
 			resp.send(data);
 		})
-
 	})
 
 	notify.rest.post(`/response/`+topic + "/:from"+"/:to", function(req, resp){
