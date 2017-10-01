@@ -25,18 +25,19 @@ notify.wsServer = function(){
 	socket.on('connection', function(socket){
 
 		socket.on("set",function(data){
-			if(data.topics.length > 0){
+			if(data.topics && data.topics.constructor === Array && data.topics.length > 0){
 				data.topics.foreach((topic)=>{
 					socket.join(topic)
 				})
 			}
 		})
 		socket.on("castUp",function(data){
-			socket.emit("castDo",{"action": "update_rooms"})
+
+			socket.broadcast.emit("castDo",{"action":"update_rooms"})
 		})
 	});
 
-	http.listen(9000, function(){});
+	http.listen(9000)
 	return socket;
 }
 
