@@ -43,11 +43,11 @@ notify.wsServer = function(){
 
 notify.restServer = function(){
 	var express = require("express");
-	var cors = require('cors')
+
+	var cors = require('cors');
 	var app = express()
-	 
 	app.use(cors())
-	
+
 	var bodyParser = require('body-parser');
 	//support parsing of application/json type post data
 	app.use(bodyParser.json());
