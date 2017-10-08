@@ -26,7 +26,7 @@ notify.wsServer = function(){
 
 		socket.on("set",function(data){
 			if(data.topics && data.topics.constructor === Array && data.topics.length > 0){
-				data.topics.foreach((topic)=>{
+				data.topics.forEach((topic)=>{
 					socket.join(topic)
 				})
 			}
