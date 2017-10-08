@@ -112,6 +112,7 @@ notify.restAddLChannel = function(topic, fn){
 				topics.collection.insert({'topic': topic});
 			}
 		})
+
 		notifications.collection.insert({
 			'topic': topic,
 			'ts': Math.floor(Date.now()),
