@@ -13,5 +13,3 @@ app.post("/register/:channel",function(req,resp){
 	notify.make(req.params.channel,eval("(" + req.body.fn + ")"));
 	resp.send("success")
 })
-// notify.ws.addPChannel('javascript');
-// notify.ws.addPChannel('Bootstrap');
