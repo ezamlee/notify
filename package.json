@@ -19,8 +19,10 @@
     "cors": "^2.8.4",
     "express": "^4.15.4",
     "mongoose": "^4.10.8",
+    "node-cron": "^1.2.1",
     "qa": "0.0.1",
     "qs": "^6.5.1",
+    "request": "^2.83.0",
     "socket.io": "^2.0.3"
   },
   "devDependencies": {
