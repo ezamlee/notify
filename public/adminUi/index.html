@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Admin Dashboard</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <script type="text/javascript" src="dist/js/jquery-latest.min.js"></script>
+  <script type="text/javascript" src="dist/js/wialon.js"></script>
+  <link rel="stylesheet" href="dist/css/leaflet.css" />
+  <script src="dist/js/leaflet.js"></script>
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="plugins/iCheck/all.css">
+  <!-- Bootstrap Color Picker -->
+  <link rel="stylesheet" href="bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
+  <!-- Bootstrap time Picker -->
+  <link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+  <!-- jvectormap -->
+  <link rel="stylesheet" href="bower_components/jvectormap/jquery-jvectormap.css">
+  <link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<style>
+  .pagination > .active > a{
+    z-index: 0
+  }
+  .box{
+    max-height: 500px;
+    overflow: hidden;
+  }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" type=""></script>
+</head>
+<body class="hold-transition skin-blue  sidebar-collapse">
+<div class="wrapper">
+
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="index2.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <!-- <span class="logo-mini"><b>A</b>LT</span> -->
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>Admin</b>Dashboard</span>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          
+          <!-- User Account: style can be found in dropdown.less -->
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="hidden-xs">Admin</span>
+            </a>
+            <ul class="dropdown-menu" style="box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);width:140px">
+              
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+      </h1>
+      
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Info boxes -->
+    
+      <div class="row" ng-controller="userMappingController">
+        <div class="col-sm-12">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">User Mapping</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="col-sm-4">
+                <table>
+                  <tr>
+                    <th style="font-weight: bold">Users</th>
+                  </tr>
+                    <!--ng repeat goes here  -->
+                  <tr ng-repeat="user in users" >
+                    <th>
+                      <div class="checkbox">
+                        <label><input type="checkbox" name="user" value="{{user}}">{{user}}</label>
+                      </div>
+                    </th>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-sm-4">
+                <table>
+                  <tr>
+                    <th style="font-weight: bold">Geofences</th>
+                  </tr>
+                    <!--ng repeat goes here  -->
+                  <tr ng-repeat="geo in geofences" >
+                    <th>
+                      <div class="checkbox">
+                        <label><input type="checkbox" name="geo" value="{{geo}}">{{geo}}</label>
+                      </div>
+                    </th>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-sm-4"><button class="btn btn-success" id="mapBtn">Map User</button></div>
+              
+            </div>
+              <!-- /.box-body -->
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-controller="userMappingController">
+        <div class="col-sm-12">
+            <div class="box box-info">
+              <div class="box-header with-border">
+                <h3 class="box-title">User Mapping</h3>
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <div class="col-sm-4">
+                  <table>
+                    <tr>
+                      <th style="font-weight: bold">Users</th>
+                    </tr>
+                      <!--ng repeat goes here  -->
+                    <tr ng-repeat="user in users" >
+                      <th>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="user" value="{{user}}">{{user}}</label>
+                        </div>
+                      </th>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-sm-4">
+                  <table>
+                    <tr>
+                      <th style="font-weight: bold">Geofences</th>
+                    </tr>
+                      <!--ng repeat goes here  -->
+                    <tr ng-repeat="geo in geofences" >
+                      <th>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="geo" value="{{geo}}">{{geo}}</label>
+                        </div>
+                      </th>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-sm-4"><button class="btn btn-success" id="mapBtn">Map User</button></div>
+                
+              </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+      </div>
+
+      <!-- /.row -->
+      
+      <!-- Main row -->
+
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2017 All rightsreserved.
+  </footer>
+
+</div>
+<!-- ./wrapper -->
+<script type="text/javascript" src="dist/js/script.js"></script>
+
+<!-- jQuery 3 -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="bower_components/datatables.net/js/jquery.dataTables.js"></script>
+<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1AdLjVDo76KdCbxQ2vksNmi1y0hXEpcU&callback=initMap" async defer>
+></script> -->
+<!-- FastClick -->
+<script src="bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
+<!-- Sparkline -->
+<script src="bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<!-- jvectormap  -->
+<script src="plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<!-- Select2 -->
+<script src="bower_components/select2/dist/js/select2.full.min.js"></script>
+<!-- InputMask -->
+<script src="plugins/input-mask/jquery.inputmask.js"></script>
+<script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<!-- date-range-picker -->
+<script src="bower_components/moment/min/moment.min.js"></script>
+<script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap datepicker -->
+<script src="bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- bootstrap color picker -->
+<script src="bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+<!-- bootstrap time picker -->
+<script src="plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<!-- SlimScroll -->
+<script src="bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<script>
+  $(function () {
+    $('.example1').DataTable()
+    //Initialize Select2 Elements
+    $('.select2').select2()
+  })
+</script>
+  <script type="text/javascript">
+    var app = angular.module('myApp', []);
+    app.controller('userMappingController', function($scope, $http) {
+      $scope.token = '0e31585320d29e3db8ca8cbeab99ed5f893CF3FF2AB55AAB78ACE9078FAC918FDADD455C'
+      $scope.domain = 'core/search_items'
+      $scope.itemsType = 'user'
+      $scope.sid = '04c4b7207b1c0b799541db4c14f63bcc'
+      $scope.token_url = `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"0e31585320d29e3db8ca8cbeab99ed5f893CF3FF2AB55AAB78ACE9078FAC918FDADD455C"}`
+      $scope.search_url = function(domain,itemsType,sid){
+        return `https://hst-api.wialon.com/wialon/ajax.html?svc=${domain}&params={"spec":{"itemsType":"${itemsType}","propName":"","propValueMask":"*","sortType":"","propType":"propitemname"},"force":1,"flags":4611686018427387903,"from":0,"to":0}&sid=${sid}`
+      }
+      $scope.users = [];
+      $scope.geofences = [];
+      $http.get($scope.token_url).then(function(response){
+        $http.get($scope.search_url($scope.domain,'user',response.data.eid)).then(function (response) {
+          $scope.users = [];
+          response.data.items.forEach((user,index)=>{
+            $scope.users.push(user.nm)
+          })
+        });
+        $http.get($scope.search_url($scope.domain,'avl_resource',response.data.eid)).then(function (response) {
+          $scope.geofences = [];
+          Object.keys(response.data.items['0']['zl']).forEach((geofence_index,index)=>{
+            $scope.geofences.push(response.data.items['0']['zl'][geofence_index].n)
+          })
+        });
+      })
+      $("#mapBtn").click((ev)=>{
+        console.log("clicked")
+        var users = [];
+        var geofences = [] ; 
+        $("[name='user']:checkbox:checked").each((i,o)=>{users.push(o.value)})
+        $("[name='geo']:checkbox:checked").each((i,o)=>{geofences.push(o.value)})
+        users.forEach((user,i1)=>{
+          console.log(user,i1);
+          geofences.forEach((geofence,i2)=>{
+            console.log(geofence,i2);
+            $http.post(`http://ec2-18-220-223-50.us-east-2.compute.amazonaws.com:13456/reg/${user}`, {"room":`${geofence}`}).then((response)=>{alert(response.data);})
+          })
+        })
+      })
+      
+    });
+  </script>
+</body>
+</html>
