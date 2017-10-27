@@ -1,13 +1,12 @@
 {
-  "name": "user",
-  "plural": "users",
+  "name": "parents",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "username": {
+    "name": {
       "type": "string",
       "required": true
     },
@@ -16,8 +15,9 @@
       "required": true
     },
     "rooms": {
-      "type": "array",
-      "required": true
+      "type": [
+        "any"
+      ]
     }
   },
   "validations": [],
