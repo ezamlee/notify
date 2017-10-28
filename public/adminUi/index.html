@@ -106,118 +106,91 @@
 
     <!-- Main content -->
     <section class="content">
-      <!-- Info boxes -->
-    
-      <div class="row" ng-controller="userMappingController">
-        <div class="col-sm-12">
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">User Mapping</h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
+     
+     <div class="row" ng-controller="userMappingController">
+       <div class="col-sm-12">
+        <button class="btn btn-primary btn-labeled" data-target="#demo-lg-modal" data-toggle="modal"><i class="fa fa-plus"></i> add</button><br/>
+<br/>
+         <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Users</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="col-sm-4">
-                <table>
+            
+              <table class="example1 table table-bordered table-striped">
+                <thead>
                   <tr>
-                    <th style="font-weight: bold">Users</th>
+                    <th>User</th>
+                    <th>Rooms</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                   </tr>
-                    <!--ng repeat goes here  -->
-                  <tr ng-repeat="user in users" >
-                    <th>
-                      <div class="checkbox">
-                        <label><input type="checkbox" name="user" value="{{user}}">{{user}}</label>
-                      </div>
-                    </th>
-                  </tr>
-                </table>
-              </div>
-              <div class="col-sm-4">
-                <table>
-                  <tr>
-                    <th style="font-weight: bold">Geofences</th>
-                  </tr>
-                    <!--ng repeat goes here  -->
-                  <tr ng-repeat="geo in geofences" >
-                    <th>
-                      <div class="checkbox">
-                        <label><input type="checkbox" name="geo" value="{{geo}}">{{geo}}</label>
-                      </div>
-                    </th>
-                  </tr>
-                </table>
-              </div>
-              <div class="col-sm-4"><button class="btn btn-success" id="mapBtn">Map User</button></div>
-              
-            </div>
-              <!-- /.box-body -->
-          </div>
-        </div>
-      </div>
-      <div class="row" ng-controller="userMappingController">
-        <div class="col-sm-12">
-            <div class="box box-info">
-              <div class="box-header with-border">
-                <h3 class="box-title">User Mapping</h3>
-                <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                </div>
-              </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-                <div class="col-sm-4">
-                  <table>
-                    <tr>
-                      <th style="font-weight: bold">Users</th>
-                    </tr>
-                      <!--ng repeat goes here  -->
-                    <tr ng-repeat="user in users" >
-                      <th>
-                        <div class="checkbox">
-                          <label><input type="checkbox" name="user" value="{{user}}">{{user}}</label>
-                        </div>
-                      </th>
-                    </tr>
-                  </table>
-                </div>
-                <div class="col-sm-4">
-                  <table>
-                    <tr>
-                      <th style="font-weight: bold">Geofences</th>
-                    </tr>
-                      <!--ng repeat goes here  -->
-                    <tr ng-repeat="geo in geofences" >
-                      <th>
-                        <div class="checkbox">
-                          <label><input type="checkbox" name="geo" value="{{geo}}">{{geo}}</label>
-                        </div>
-                      </th>
-                    </tr>
-                  </table>
-                </div>
-                <div class="col-sm-4"><button class="btn btn-success" id="mapBtn">Map User</button></div>
+                </thead>
+                <tbody id="bdy">
+                </tbody>
                 
-              </div>
-                <!-- /.box-body -->
+              </table>
             </div>
-        </div>
-      </div>
-
-      <!-- /.row -->
-      
-      <!-- Main row -->
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+       </div>
+     </div>
 
 
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+  <!--Large Bootstrap Modal-->
+  <!--===================================================-->
+  <div id="demo-lg-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal"><span>&times;</span></button>
+          <h4 class="modal-title" id="myLargeModalLabel">Add User</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal add" method="post">
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="name" class="col-sm-2 control-label">Name</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" placeholder="Name">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="password" class="col-sm-2 control-label">Password</label>
+
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" id="password" placeholder="Password">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="rooms" class="col-sm-2 control-label">Rooms</label>
+                  <div class="col-sm-10">
+                    <select class="form-control select2" id="rooms" multiple="multiple" data-placeholder="Select Rooms" style="width: 100%;">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <!-- <button type="submit" class="btn btn-default pull-right cancel">Cancel</button>  -->
+                <button type="submit" class="btn btn-info pull-right">Save</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--===================================================-->
+  <!--End Large Bootstrap Modal-->
 
   <footer class="main-footer">
     <strong>Copyright &copy; 2017 All rightsreserved.
@@ -232,7 +205,7 @@
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- DataTables -->
-<script src="bower_components/datatables.net/js/jquery.dataTables.js"></script>
+<script src="bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1AdLjVDo76KdCbxQ2vksNmi1y0hXEpcU&callback=initMap" async defer>
 ></script> -->
@@ -268,52 +241,97 @@
   $(function () {
     $('.example1').DataTable()
     //Initialize Select2 Elements
-    $('.select2').select2()
+    $('.select2').select2();
+
+    //get all users
+    function getAllUsers(){
+      var settings1 = {
+        "url": "http://localhost:3000/api/parents",
+        "method": "GET"
+      }
+
+      $.ajax(settings1).done(function (response) {
+        var rs = '';
+        if (response.length > 0) {
+          $('#bdy').html('')
+          for (var i =0 ; i < response.length; i++) {
+            
+            for (var j = 0; j< response[i]['rooms'].length; j++) {
+              rs += response[i]['rooms'][j]+ ", ";
+            }
+            $('.dataTables_empty').hide();
+            
+            var tr = "<tr id='"+response[i].id+"'><td>"+response[i].name+"</td><td>"+rs+"</td><td>"+
+              "<button class='btn btn-default'><i class='fa fa-pencil fa-fw'></i></button>"
+            +"</td><td><button class='btn btn-danger delete'><i class='fa fa-times fa-fw'></i></button></td></tr>";
+            $('#bdy').append(tr);
+            rs = '';
+          }
+        }
+      });
+    }
+
+    //get all rooms
+    function getAllRooms(){ 
+      var settings2 = {
+        "url": "http://localhost:3000/api/sources",
+        "method": "GET"
+      }
+
+      $.ajax(settings2).done(function (response) {
+        if (response.length > 0) {
+          $('#rooms').html('');
+          for (var i =0 ; i < response.length; i++) {
+            var options = "<option id='"+ response[i].uniqueID +"'>"+response[i]['data']['name']+"</option>"
+            $('#rooms').append(options)
+          }
+        }
+      });
+    }
+
+    $('#bdy').on('click', '.delete', function(){
+      let userId = $(this).closest("tr").attr('id');
+      console.log(userId)
+      var settings1 = {
+        "url": "http://localhost:3000/api/parents/"+userId,
+        "method": "DELETE"
+      }
+
+      $.ajax(settings1).done(function (response) {
+        getAllUsers();
+      });
+    })
+
+
+    $(".add").submit(function(e){
+      e.preventDefault();
+
+      let newUser = {
+        "name": $('#name').val(),
+        "password": $('#password').val(),
+        "rooms": $('#rooms').val()
+      }
+      var settings3 = {
+        "url": "http://localhost:3000/api/parents",
+        "method": "POST",
+        "data": newUser
+      }
+
+      $.ajax(settings3).done(function (response) {
+        getAllUsers();
+        $('#demo-lg-modal').modal('hide');
+      });
+
+    });
+
+
+    getAllUsers();
+    getAllRooms();
+    
+
+
   })
 </script>
-  <script type="text/javascript">
-    var app = angular.module('myApp', []);
-    app.controller('userMappingController', function($scope, $http) {
-      $scope.token = '0e31585320d29e3db8ca8cbeab99ed5f893CF3FF2AB55AAB78ACE9078FAC918FDADD455C'
-      $scope.domain = 'core/search_items'
-      $scope.itemsType = 'user'
-      $scope.sid = '04c4b7207b1c0b799541db4c14f63bcc'
-      $scope.token_url = `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"0e31585320d29e3db8ca8cbeab99ed5f893CF3FF2AB55AAB78ACE9078FAC918FDADD455C"}`
-      $scope.search_url = function(domain,itemsType,sid){
-        return `https://hst-api.wialon.com/wialon/ajax.html?svc=${domain}&params={"spec":{"itemsType":"${itemsType}","propName":"","propValueMask":"*","sortType":"","propType":"propitemname"},"force":1,"flags":4611686018427387903,"from":0,"to":0}&sid=${sid}`
-      }
-      $scope.users = [];
-      $scope.geofences = [];
-      $http.get($scope.token_url).then(function(response){
-        $http.get($scope.search_url($scope.domain,'user',response.data.eid)).then(function (response) {
-          $scope.users = [];
-          response.data.items.forEach((user,index)=>{
-            $scope.users.push(user.nm)
-          })
-        });
-        $http.get($scope.search_url($scope.domain,'avl_resource',response.data.eid)).then(function (response) {
-          $scope.geofences = [];
-          Object.keys(response.data.items['0']['zl']).forEach((geofence_index,index)=>{
-            $scope.geofences.push(response.data.items['0']['zl'][geofence_index].n)
-          })
-        });
-      })
-      $("#mapBtn").click((ev)=>{
-        console.log("clicked")
-        var users = [];
-        var geofences = [] ; 
-        $("[name='user']:checkbox:checked").each((i,o)=>{users.push(o.value)})
-        $("[name='geo']:checkbox:checked").each((i,o)=>{geofences.push(o.value)})
-        users.forEach((user,i1)=>{
-          console.log(user,i1);
-          geofences.forEach((geofence,i2)=>{
-            console.log(geofence,i2);
-            $http.post(`http://ec2-18-220-223-50.us-east-2.compute.amazonaws.com:13456/reg/${user}`, {"room":`${geofence}`}).then((response)=>{alert(response.data);})
-          })
-        })
-      })
-      
-    });
-  </script>
+  
 </body>
 </html>
