@@ -313,7 +313,7 @@
             $('.dataTables_empty').hide();
             
             var tr = "<tr id='"+response[i].id+"'><td>"+response[i].name+"</td><td>"+rs+"</td><td>"+
-              "<button class='btn btn-default edit' data-target='#editModel' data-toggle='modal'><i class='fa fa-pencil fa-fw'></i></button>"
+              "<button class='btn btn-default editBTN' data-target='#editModel' data-toggle='modal'><i class='fa fa-pencil fa-fw'></i></button>"
             +"</td><td><button class='btn btn-danger delete'><i class='fa fa-times fa-fw'></i></button></td></tr>";
             $('#bdy').append(tr);
             rs = '';
@@ -371,12 +371,12 @@
       }
 
       $.ajax(settings4).done(function (response) {
-        getAllUsers();
+        window.location.reload();
       });
     })
 
 
-    $('#bdy').on('click', '.edit', function(){
+    $('#bdy').on('click', '.editBTN', function(){
       let userId = $(this).closest("tr").attr('id');
 
       var settings5 = {
