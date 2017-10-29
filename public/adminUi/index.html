@@ -349,6 +349,7 @@
       }
       else{
         $(".errMsg").hide();
+        
 
         var settings7 = {
           "url": "http://ec2-18-220-223-50.us-east-2.compute.amazonaws.com:3000/api/parents",
@@ -366,10 +367,19 @@
               $("#errName").show();
             }else{
               $("#errName").hide();
+
+              let arr = []
+
+              for (var i = 0; i < $('.rooms').find(":selected").length ; i++) {
+                console.log($($('.rooms').find(":selected")[i]).attr('id'))
+                arr.push($($('.rooms').find(":selected")[i]).attr('id'))
+              }
+
+              // "rooms": $('.rooms').val()
               let newUser = {
                 "name": $('#name').val(),
                 "password": $('#password').val(),
-                "rooms": $('.rooms').val()
+                "rooms": arr
               }
               var settings3 = {
                 "url": "http://ec2-18-220-223-50.us-east-2.compute.amazonaws.com:3000/api/parents",
@@ -431,10 +441,18 @@
       else{
         $(".errMsg").hide();
         let userId = $('#editModel #id').val();
+
+        let arr = []
+
+        for (var i = 0; i < $('.rooms').find(":selected").length ; i++) {
+          console.log($($('.rooms').find(":selected")[i]).attr('id'))
+          arr.push($($('.rooms').find(":selected")[i]).attr('id'))
+        }
+
         let newUser = {
           "name": $('#editModel #name').val(),
           "password": $('#editModel #password').val(),
-          "rooms": $('#editModel .rooms').val(),
+          "rooms": arr,
           id: userId
         }
         var settings6 = {
