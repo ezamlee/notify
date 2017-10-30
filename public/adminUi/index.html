@@ -17,16 +17,6 @@
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
-  <!-- daterange picker -->
-  <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css">
-  <!-- bootstrap datepicker -->
-  <link rel="stylesheet" href="bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
-  <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="plugins/iCheck/all.css">
-  <!-- Bootstrap Color Picker -->
-  <link rel="stylesheet" href="bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
-  <!-- Bootstrap time Picker -->
-  <link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css">
   <!-- Select2 -->
   <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
   <!-- jvectormap -->
@@ -53,7 +43,7 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" type=""></script>
 </head>
-<body class="hold-transition skin-blue  sidebar-collapse">
+<body class="hold-transition skin-blue sidebar-collapse">
 <div class="wrapper">
 
   <header class="main-header">
@@ -266,8 +256,6 @@
 <script src="bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-<!-- Sparkline -->
-<script src="bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
 <!-- jvectormap  -->
 <script src="plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
 <script src="plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
@@ -277,15 +265,6 @@
 <script src="plugins/input-mask/jquery.inputmask.js"></script>
 <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
-<!-- date-range-picker -->
-<script src="bower_components/moment/min/moment.min.js"></script>
-<script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-<!-- bootstrap datepicker -->
-<script src="bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<!-- bootstrap color picker -->
-<script src="bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
-<!-- bootstrap time picker -->
-<script src="plugins/timepicker/bootstrap-timepicker.min.js"></script>
 <!-- SlimScroll -->
 <script src="bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- iCheck 1.0.1 -->
@@ -308,8 +287,8 @@
         if (response.length > 0) {
           $('#bdy').html('')
           for (var i =0 ; i < response.length; i++) {
-            for (var j = 0; j< response[i]['rooms'].length; j++) {
-              rs += response[i]['rooms'][j]+ ", ";
+            for (var j = 0; j< response[i]['rmNames'].length; j++) {
+              rs += response[i]['rmNames'][j]+ ", ";
             }
             $('.dataTables_empty').hide();
             
@@ -371,14 +350,13 @@
               let arr = []
 
               for (var i = 0; i < $('.rooms').find(":selected").length ; i++) {
-                console.log($($('.rooms').find(":selected")[i]).attr('id'))
                 arr.push($($('.rooms').find(":selected")[i]).attr('id'))
               }
 
-              // "rooms": $('.rooms').val()
               let newUser = {
                 "name": $('#name').val(),
                 "password": $('#password').val(),
+                "rmNames": $('.rooms').val(),
                 "rooms": arr
               }
               var settings3 = {
@@ -403,7 +381,6 @@
 
     $('#bdy').on('click', '.delete', function(){
       let userId = $(this).closest("tr").attr('id');
-	   console.log(userId);
       var settings4 = {
         "url": "http://ec2-18-220-223-50.us-east-2.compute.amazonaws.com:3000/api/parents/"+userId,
         "method": "DELETE"
@@ -427,8 +404,6 @@
         $('#editModel #id').val(response.id)
         $('#editModel #name').val(response.name)
         $('#editModel #password').val(response.password)
-        // $('#editModel .rooms').val('heba')
-
       });
     });
 
@@ -445,13 +420,13 @@
         let arr = []
 
         for (var i = 0; i < $('.rooms').find(":selected").length ; i++) {
-          console.log($($('.rooms').find(":selected")[i]).attr('id'))
           arr.push($($('.rooms').find(":selected")[i]).attr('id'))
         }
 
         let newUser = {
           "name": $('#editModel #name').val(),
           "password": $('#editModel #password').val(),
+          "rmNames": $('#editModel .rooms').val(),
           "rooms": arr,
           id: userId
         }
@@ -468,12 +443,8 @@
       }
     });
 
-
     getAllUsers();
-    getAllRooms();
-    
-
-
+    getAllRooms();    
   })
 </script>
   
