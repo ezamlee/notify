@@ -122,7 +122,6 @@ notify.wsAddPChannel = function (topic) {
 notify.restAddLChannel = function (topic, fn) {
 	
 	notify.rest.post('/' + topic, function (req, resp) {
-		console.log("req.body", req.body);
 		topics.findOne({
 			'topic': topic
 		}, (err, data) => {
