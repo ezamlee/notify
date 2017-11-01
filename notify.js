@@ -137,9 +137,9 @@ notify.restAddLChannel = function (topic, fn) {
 			'ts': Math.floor(Date.now()),
 			'notification': fn({
 				"notification": {
-					"status": req.body.status,
-					"mydata": req.body.mydata,
-					"tittle": req.body.tittle
+					"status": req.notification.status,
+					"mydata": req.notification.mydata,
+					"title": req.notification.title
 				}
 			}),
 			"params": req.params,
@@ -150,9 +150,9 @@ notify.restAddLChannel = function (topic, fn) {
 		})
 		notify.ws.to(topic).emit('serverpublisher', fn({
 			"notification": {
-				"status": req.body.status,
-				"mydata": req.body.mydata,
-				"tittle": req.body.tittle
+				"status": req.notification.status,
+				"mydata": req.notification.mydata,
+				"title": req.notification.title
 			}
 		}))
 		resp.status('200').send("success")
