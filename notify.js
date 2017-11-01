@@ -135,6 +135,7 @@ notify.restAddLChannel = function (topic, fn) {
 		notifications.collection.insert({
 			'topic': topic,
 			'ts': Math.floor(Date.now()),
+			'notification': fn(req.body),
 			'notification': fn({
 				"notification": {
 					"status": req.body.status,

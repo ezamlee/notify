@@ -25,6 +25,7 @@ app.post("/register/:channel", function (req, resp) {
 })
 
 //get token
+
 function getToken() {
 	return new Promise((resolve, reject) => {
 		var options = {
@@ -40,6 +41,7 @@ function getToken() {
 }
 
 //get/update recources from wialon
+
 function check_avaliable(type, id, name) {
 	return new Promise((resolve, reject) => {
 		var options = {
