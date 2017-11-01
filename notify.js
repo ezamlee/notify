@@ -139,7 +139,7 @@ notify.restAddLChannel = function (topic, fn) {
 				"notification": {
 					"status": req.body.status,
 					"mydata": req.body.mydata,
-					"tittle": req.body.tittle
+					"title": req.body.title
 				}
 			}),
 			"params": req.params,
@@ -152,7 +152,7 @@ notify.restAddLChannel = function (topic, fn) {
 			"notification": {
 				"status": req.body.status,
 				"mydata": req.body.mydata,
-				"tittle": req.body.tittle
+				"title":req.body.title
 			}
 		}))
 		resp.status('200').send("success")
