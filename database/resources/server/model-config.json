@@ -13,11 +13,11 @@
       "./mixins"
     ]
   },
-  "source": {
+  "parent": {
     "dataSource": "mydb",
     "public": true
   },
-  "parents": {
+  "notification": {
     "dataSource": "mydb",
     "public": true
   }

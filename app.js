@@ -27,7 +27,7 @@ app.post("/register/:channel", function (req, resp) {
 //get token
 
 function getToken() {
-	return new Promise((resolve, reject) => {
+	return new Promise(( resolve, reject ) => {
 		var options = {
 			method: 'GET',
 			url: `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"0e31585320d29e3db8ca8cbeab99ed5f2C93B2C440D72DE3F86013521938F65D2330D0B2"}`,

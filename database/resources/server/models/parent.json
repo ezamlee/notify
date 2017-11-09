@@ -1,0 +1,37 @@
+{
+  "name": "parent",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "pass": {
+      "type": "string"
+    },
+    "children": {
+      "type": [
+        "object"
+      ]
+    },
+    "loc": {
+      "type": "object"
+    },
+    "nid": {
+      "type": "string"
+    },
+    "secCode": {
+      "type": "string"
+    },
+    "passStatus": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

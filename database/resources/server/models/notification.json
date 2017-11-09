@@ -1,0 +1,44 @@
+{
+  "name": "notification",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "time": {
+      "type": "date"
+    },
+    "msg": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "sid": {
+      "type": "string"
+    },
+    "locLat": {
+      "type": "string"
+    },
+    "locLong": {
+      "type": "string"
+    },
+    "locDesc": {
+      "type": "string"
+    },
+    "driverName": {
+      "type": "string"
+    },
+    "driverPhone": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
