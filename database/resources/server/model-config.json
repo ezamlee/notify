@@ -20,5 +20,9 @@
   "notification": {
     "dataSource": "mydb",
     "public": true
+  },
+  "userToken": {
+    "dataSource": "mydb",
+    "public": true
   }
 }

@@ -120,7 +120,7 @@ notify.wsAddPChannel = function (topic) {
 	})
 }
 notify.restAddLChannel = function (topic, fn) {
-
+	
 	notify.rest.post('/' + topic, function (req, resp) {
 		topics.findOne({
 			'topic': topic
@@ -135,6 +135,7 @@ notify.restAddLChannel = function (topic, fn) {
 		notifications.collection.insert({
 			'topic': topic,
 			'ts': Math.floor(Date.now()),
+			'notification': fn(req.body),
 			'notification': fn({
 				"notification": {
 					"status": req.body.status,
