@@ -178,24 +178,49 @@ router.post("/login", function (req, resp) {
     var password = req.body.password || req.params.password || req.query.password || null;
 
     if (nid && password) {
-        //go to mongo and verify against user and password
+
+        rp({
+                uri: `http://localhost:3000/api/parents?filter[where][nid]=${nid}&filter[where][pass]=${password}`,
+                json: true,
+                method: "GET"
+            })
+            .then(function (resdata) {
+                if (resdata.length > 0) {
+                    const payload = {
+                        "nid": nid,
+                        "status": "logged",
+                        "data": resdata
+                    };
+                    //sign token
+                    var token = jwt.sign(payload, "mysecretword", {
+
+                    });
+                    //set data
+                    // return the information including token as JSON
+                    resp.json({
+                        success: true,
+                        message: 'Enjoy your token!',
+                        token: token
+                    });
+                } else {
+                    resp.json({
+                        success: false,
+                        message: "failed to login"
+                    })
+                }
+
+            })
+            .catch(function (err) {
+                resp.json({
+                    success: false,
+                    message: "Data is misleading or user is not allowed"
+                })
+            });
+
+
         var authenticated = true;
         if (authenticated) {
-            const payload = {
-                "nid": nid,
-                "status": "logged"
-            };
-            //sign token
-            var token = jwt.sign(payload, "mysecretword", {
 
-            });
-            //set data
-            // return the information including token as JSON
-            resp.json({
-                success: true,
-                message: 'Enjoy your token!',
-                token: token
-            });
         } else {
             resp.json({
                 success: false,
