@@ -4,7 +4,6 @@ let request = require("request");
 var rp = require('request-promise');
 var jwt = require("jsonwebtoken");
 
-
 router.get("/checkcode", (req, resp) => {
     var nid = req.body.nid || req.params.nid || req.query.nid || null;
     var secureCode = req.body.secureCode || req.params.secureCode || req.query.secureCode || null;
@@ -26,7 +25,6 @@ router.get("/checkcode", (req, resp) => {
                         message: "user is not allowed to Register"
                     })
                 }
-
             })
             .catch(function (err) {
                 resp.json({
@@ -107,7 +105,8 @@ router.post("/register", (req, resp) => {
                                             "long": locLong,
                                             "lat": locLat,
                                             "fence_id": getfenceID
-                                        }
+                                        },
+                                        "created_notification": false
                                     },
                                     json: true
                                 }).then((finaluserdata) => {
@@ -171,8 +170,6 @@ router.post("/register", (req, resp) => {
         });
     }
 });
-
-
 router.post("/login", function (req, resp) {
     var nid = req.body.nid || req.params.nid || req.query.nid || null;
     var password = req.body.password || req.params.password || req.query.password || null;
@@ -208,7 +205,6 @@ router.post("/login", function (req, resp) {
                         message: "failed to login"
                     })
                 }
-
             })
             .catch(function (err) {
                 resp.json({
@@ -234,12 +230,10 @@ router.post("/login", function (req, resp) {
         });
     }
 });
-
 router.all("*", (req, resp) => {
     resp.json({
         success: false,
         message: 'NO RESOURCE AVALIABLE'
     });
 });
-
 module.exports = router;

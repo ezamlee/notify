@@ -28,6 +28,9 @@
     },
     "passStatus": {
       "type": "string"
+    },
+    "created_notification": {
+      "type": "boolean"
     }
   },
   "validations": [],
