@@ -7,7 +7,7 @@
   },
   "properties": {
     "time": {
-      "type": "date"
+      "type": "string"
     },
     "msg": {
       "type": "string"

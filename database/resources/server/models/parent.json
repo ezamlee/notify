@@ -13,9 +13,7 @@
       "type": "string"
     },
     "children": {
-      "type": [
-        "object"
-      ]
+      "type": "object"
     },
     "loc": {
       "type": "object"

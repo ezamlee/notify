@@ -57,7 +57,6 @@ router.post("/register", (req, resp) => {
                 method: "GET"
             })
             .then(function (resdata) {
-                console.log(resdata)
                 if (resdata.length > 0) {
                     resdata = resdata[0];
                     userid = resdata.id;
@@ -86,9 +85,7 @@ router.post("/register", (req, resp) => {
                                 }
                             }).then((getGeoRes) => {
                                 getGeoRes = JSON.parse(getGeoRes);
-                                console.log("created geo " + getGeoRes);
                                 getfenceID = "appdev-" + getGeoRes[0];
-                                console.log("fenceid = ", getfenceID)
                                 //userid
                                 rp({
                                     method: 'POST',
@@ -110,7 +107,6 @@ router.post("/register", (req, resp) => {
                                     },
                                     json: true
                                 }).then((finaluserdata) => {
-                                    console.log(finaluserdata)
                                     if (finaluserdata && parseInt(finaluserdata.count) && parseInt(finaluserdata.count) > 0) {
                                         resp.json({
                                             success: true,
@@ -173,9 +169,7 @@ router.post("/register", (req, resp) => {
 router.post("/login", function (req, resp) {
     var nid = req.body.nid || req.params.nid || req.query.nid || null;
     var password = req.body.password || req.params.password || req.query.password || null;
-
     if (nid && password) {
-
         rp({
                 uri: `http://localhost:3000/api/parents?filter[where][nid]=${nid}&filter[where][pass]=${password}`,
                 json: true,
@@ -212,21 +206,11 @@ router.post("/login", function (req, resp) {
                     message: "Data is misleading or user is not allowed"
                 })
             });
-
-
-        var authenticated = true;
-        if (authenticated) {
-
-        } else {
-            resp.json({
-                success: false,
-                message: 'failed to authenticate you'
-            });
-        }
     } else {
         resp.json({
             success: false,
-            message: 'failed to get user and his password'
+            message: 'failed to get user and his password',
+            eer: req.query.nid + req.query.password
         });
     }
 });

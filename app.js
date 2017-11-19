@@ -27,7 +27,7 @@ app.post("/register/:channel", function (req, resp) {
 //get token
 
 function getToken() {
-	return new Promise(( resolve, reject ) => {
+	return new Promise((resolve, reject) => {
 		var options = {
 			method: 'GET',
 			url: `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"0e31585320d29e3db8ca8cbeab99ed5f2C93B2C440D72DE3F86013521938F65D2330D0B2"}`,
@@ -62,13 +62,9 @@ function check_avaliable(type, id, name) {
 						},
 						json: true
 					};
-					request(options2, function (error, response, body) {
-						console.log(error, body)
-					})
-					console.log("true");
+					request(options2, function (error, response, body) {})
 					resolve(true)
 				} else {
-					console.log("False");
 					resolve(false)
 				}
 			}
@@ -136,38 +132,28 @@ function getUpdateData() {
 					check_avaliable("unit", unit.id, unit.nm).then((isNewSource) => {})
 				});
 			}
-		}).catch((er) => {
-			console.log(er)
-		})
+		}).catch((er) => {})
 		getResc(newtoken).then((items) => {
 			if (items.length > 0) {
 				items.forEach(function (rc) {
 					if (rc.tags) {
 						Object.keys(rc.tags).forEach((i) => {
-							check_avaliable("tag", rc["tags"][i]["c"], rc["tags"][i]["n"]).then((isNewSource) => {}).catch((er) => {
-								console.log(er)
-							})
+							check_avaliable("tag", rc["tags"][i]["c"], rc["tags"][i]["n"]).then((isNewSource) => {}).catch((er) => {})
 						})
 					}
 					if (rc.zl) {
 						Object.keys(rc.zl).forEach((j) => {
-							check_avaliable("geo", rc["nm"] + "-" + rc["zl"][j]["id"], rc["zl"][j]["n"]).then((isNewSource) => {}).catch((er) => {
-								console.log(er)
-							})
+							check_avaliable("geo", rc["nm"] + "-" + rc["zl"][j]["id"], rc["zl"][j]["n"]).then((isNewSource) => {}).catch((er) => {})
 						})
 					}
 				});
 			}
-		}).catch((er) => {
-			console.log(er)
-		})
-	}).catch((er) => {
-		console.log(er)
-	})
+		}).catch((er) => {})
+	}).catch((er) => {})
 }
 
 cron.schedule('*/30 * * * * *', function () {
-	getUpdateData();
+	//getUpdateData();
 });
 
 //make listner for each resourc
