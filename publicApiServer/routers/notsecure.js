@@ -85,7 +85,7 @@ router.post("/register", (req, resp) => {
                                 }
                             }).then((getGeoRes) => {
                                 getGeoRes = JSON.parse(getGeoRes);
-                                getfenceID = "appdev-" + getGeoRes[0];
+                                getfenceID = getGeoRes[0];
                                 //userid
                                 rp({
                                     method: 'POST',
@@ -115,13 +115,13 @@ router.post("/register", (req, resp) => {
                                     } else {
                                         resp.json({
                                             success: false,
-                                            message: "unable to register 1 user/server error"
+                                            message: "unable to register  user/server error"
                                         })
                                     }
                                 }).catch((err) => {
                                     resp.json({
                                         success: false,
-                                        message: "unable to register user  2 server error",
+                                        message: "unable to register user server error",
                                         error: err
                                     })
                                 })

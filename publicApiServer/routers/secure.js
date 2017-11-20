@@ -33,7 +33,7 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
                     throw "cannot find the child record"
                 }
             } else {
-                return
+                //return
                 throw "The value is not tag ID";
             }
         })
