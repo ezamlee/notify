@@ -96,11 +96,9 @@ function update_data() {
 		})
 }
 
-cron.schedule('*/30 * * * * *', function () {
-	//getUpdateData();
+cron.schedule('* */5 * * * *', function () {
+	update_data();
 });
-
-update_data();
 
 //make listner for each resourc
 
