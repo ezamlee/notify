@@ -70,6 +70,7 @@ router.post("/register", (req, resp) => {
                         }
                     }).then((getTokenResp) => {
                         getTokenResp = JSON.parse(getTokenResp);
+                        console.log(getTokenResp);
                         if (getTokenResp["eid"]) {
                             sesssion_id = getTokenResp["eid"]
                             rp({
