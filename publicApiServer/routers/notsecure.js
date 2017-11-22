@@ -66,7 +66,7 @@ router.post("/register", (req, resp) => {
                         url: 'https://hst-api.wialon.com/wialon/ajax.html',
                         qs: {
                             svc: 'token/login',
-                            params: '{"token":"0e31585320d29e3db8ca8cbeab99ed5f409474CD741B96831CFC175F628DDFDCBABB92E4"}'
+                            params: '{"token":"0e31585320d29e3db8ca8cbeab99ed5f6663BB5C31F9C524668EB9CE4813BEF41F8C8846"}'
                         }
                     }).then((getTokenResp) => {
                         getTokenResp = JSON.parse(getTokenResp);
