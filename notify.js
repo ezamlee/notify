@@ -81,9 +81,13 @@ app.post("/:sid", (req, resp) => {
 socket.on('connection', function (socket) {
 
     socket.on("set", function (data) {
+        console.log("set is entered")
         if (data.topics && data.topics.constructor === Array && data.topics.length > 0) {
+
             data.topics.forEach((topic) => {
+                console.log("topic joinning" + topic);
                 socket.join(topic)
+                console.log("topic joined" + topic)
             })
         }
     })
