@@ -193,7 +193,7 @@ router.post("/login", function (req, resp) {
                         success: true,
                         message: 'Enjoy your token!',
                         token: token,
-                        data: resdata
+                        data: "data"
                     });
                 } else {
                     resp.json({
