@@ -195,8 +195,8 @@ router.post("/login", function (req, resp) {
                         message: 'Enjoy your token!',
                         token: token,
                         data: {
-                            "children": resdata["children"],
-                            "loc": resdata["loc"]
+                            "children": resdata[0]["children"],
+                            "loc": resdata[0]["loc"]
                         }
                     });
                 } else {
