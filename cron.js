@@ -79,21 +79,13 @@ function update_data() {
 									body: parentData,
 									json: true
 								})
-								.then((success) => {
-									console.log(success)
-								}).catch((err) => {
-									console.log("failed to save")
-								})
+								.then((success) => {}).catch((err) => {})
 						}
 					}
-				}).catch((err) => {
-					console.log("error thrown " + err)
-				})
+				}).catch((err) => {})
 			})
 		})
-		.catch((err) => {
-			console.log("Error of " + err);
-		})
+		.catch((err) => {})
 }
 
 cron.schedule('* */5 * * * *', function () {

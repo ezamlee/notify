@@ -16,7 +16,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.post("/:sid", (req, resp) => {
-    console.log(req.hostname);
     var time = req.body.time || null;
     var msg = req.body.msg || null;
     var status = req.body.status || null;
@@ -54,9 +53,7 @@ app.post("/:sid", (req, resp) => {
                 json: true
             })
             .then((dbresp) => {
-                console.log(dbresp);
                 socket.to(sid).emit('serverpublisher', dbresp);
-                console.log("socket is sent");
                 resp.status(200).json({
                     "msg": "success"
                 })
@@ -81,13 +78,10 @@ app.post("/:sid", (req, resp) => {
 socket.on('connection', function (socket) {
 
     socket.on("set", function (data) {
-        console.log("set is entered")
         if (data.topics && data.topics.constructor === Array && data.topics.length > 0) {
 
             data.topics.forEach((topic) => {
-                console.log("topic joinning" + topic);
                 socket.join(topic)
-                console.log("topic joined" + topic)
             })
         }
     })

@@ -70,7 +70,6 @@ router.post("/register", (req, resp) => {
                         }
                     }).then((getTokenResp) => {
                         getTokenResp = JSON.parse(getTokenResp);
-                        console.log(getTokenResp);
                         if (getTokenResp["eid"]) {
                             sesssion_id = getTokenResp["eid"]
                             rp({
@@ -189,7 +188,6 @@ router.post("/login", function (req, resp) {
                     });
                     //set data
                     // return the information including token as JSON
-                    console.log(resdata);
                     resp.json({
                         success: true,
                         message: 'Enjoy your token!',
