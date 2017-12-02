@@ -189,13 +189,14 @@ router.post("/login", function (req, resp) {
                     });
                     //set data
                     // return the information including token as JSON
+                    console.log(resdata);
                     resp.json({
                         success: true,
                         message: 'Enjoy your token!',
                         token: token,
                         data: {
-                            "children": resdata.children,
-                            "loc": resdata.loc
+                            "children": resdata["children"],
+                            "loc": resdata["loc"]
                         }
                     });
                 } else {
