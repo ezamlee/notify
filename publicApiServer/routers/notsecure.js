@@ -192,7 +192,8 @@ router.post("/login", function (req, resp) {
                     resp.json({
                         success: true,
                         message: 'Enjoy your token!',
-                        token: token
+                        token: token,
+                        data: resdata
                     });
                 } else {
                     resp.json({
