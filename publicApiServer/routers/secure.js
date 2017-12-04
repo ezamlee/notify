@@ -6,7 +6,7 @@ var rp = require('request-promise');
 router.post("/children", function (req, resp) {
     console.log(req.decoded);
     rp({
-            uri: `http://localhost:3000/api/notifications?filter[where][nid]=${req.decoded.data[0].nid}`,
+            uri: `http://localhost:3000/api/parents?filter[where][nid]=${req.decoded.data[0].nid}`,
             json: true,
             method: "GET"
         })
