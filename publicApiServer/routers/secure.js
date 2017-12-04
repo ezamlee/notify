@@ -4,18 +4,26 @@ let validator = require('validator');
 var rp = require('request-promise');
 
 router.post("/children", function (req, resp) {
-
+    console.log(req.decoded.data[0], req.decoded);
     rp({
-        uri: `http://localhost:3000/api/notifications?filter[where][nid]=${req.decoded.data[0].nid}`,
-        json: true,
-        method: "GET"
-    }).then((user_data) => {
-        resp.status(200).json({
-            success: true,
-            message: 'Children Details',
-            data: user_data[0].children ? user_data[0].children : null
-        });
-    })
+            uri: `http://localhost:3000/api/notifications?filter[where][nid]=${req.decoded.data[0].nid}`,
+            json: true,
+            method: "GET"
+        })
+        .then((user_data) => {
+            resp.status(200).json({
+                success: true,
+                message: 'Children Details',
+                data: user_data[0].children ? user_data[0].children : null
+            });
+        })
+        .catch((err) => {
+            resp.status(200).json({
+                success: false,
+                message: 'Error Message',
+                error: err
+            });
+        })
 });
 
 router.post("/notification/:childTag", function (req, resp) {
