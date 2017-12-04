@@ -15,7 +15,7 @@ router.post("/children", function (req, resp) {
             resp.status(200).json({
                 success: true,
                 message: 'Children Details',
-                data: user_data[0].children ? user_data[0].children : null
+                data: user_data && user_data.constructor === Array && user_data.length > 0 && user_data[0].children ? user_data[0].children : null
             });
         })
         .catch((err) => {
