@@ -4,13 +4,14 @@ let validator = require('validator');
 var rp = require('request-promise');
 
 router.post("/children", function (req, resp) {
-    console.log(req.decoded.data[0], req.decoded);
+    //console.log(req.decoded.data[0], req.decoded);
     rp({
             uri: `http://localhost:3000/api/notifications?filter[where][nid]=${req.decoded.data[0].nid}`,
             json: true,
             method: "GET"
         })
         .then((user_data) => {
+            console.log(user_data)
             resp.status(200).json({
                 success: true,
                 message: 'Children Details',
