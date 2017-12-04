@@ -11,7 +11,6 @@ router.post("/children", function (req, resp) {
             method: "GET"
         })
         .then((user_data) => {
-            console.log(user_data)
             resp.status(200).json({
                 success: true,
                 message: 'Children Details',
