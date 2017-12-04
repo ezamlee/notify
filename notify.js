@@ -79,7 +79,7 @@ socket.on('connection', function (socket) {
 
     socket.on("set", function (data) {
         if (data.topics && data.topics.constructor === Array && data.topics.length > 0) {
-            console.log(topics);
+            console.log(data.topics);
             data.topics.forEach((topic) => {
                 socket.join(topic)
             })
