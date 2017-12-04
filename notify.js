@@ -26,7 +26,8 @@ app.post("/:sid", (req, resp) => {
     var locDesc = req.body.locDesc || null;
     var driverPhone = req.body.driverPhone || "Not Avaliable";
     var driverName = req.body.driverName || "Not Avaliable";
-
+    console.log(
+        (time && msg && status && source && sid && locDesc && locLat && locLong && driverName && driverPhone), time, msg, status, source, sid, locLat, locLong, locDesc, driverPhone, driverName)
     if (time && msg && status &&
         source && sid && locDesc &&
         locLat && locLong && driverName &&
