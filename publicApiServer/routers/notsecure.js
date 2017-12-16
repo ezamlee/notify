@@ -44,7 +44,7 @@ router.post("/register", (req, resp) => {
     var secureCode = req.body.secureCode || req.params.secureCode || req.query.secureCode || null;
 
     var locLat = req.body.locLong || req.params.locLong || req.query.locLong || null;
-    var locLong = req.body.locLat || req.params.locLong || req.query.locLong || null;
+    var locLong = req.body.locLat || req.params.locLat || req.query.locLat || null;
     var locDesc = req.body.locDesc || req.params.locDesc || req.query.locDesc || null;
 
     var name = req.body.name || req.params.name || req.query.name || null;
