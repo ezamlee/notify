@@ -119,7 +119,10 @@ router.post("/register", (req, resp) => {
                                           success: true,
                                           message: 'Enjoy your token!',
                                           token: token,
-                                          data:finaluserdata
+                                          data: {
+                                              "children": finaluserdata["children"],
+                                              "loc": finaluserdata["loc"]
+                                          }
                                         })
                                     } else {
                                         resp.json({
