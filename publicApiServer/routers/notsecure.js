@@ -114,6 +114,7 @@ router.post("/register", (req, resp) => {
                                         });
                                         //set data
                                         // return the information including token as JSON
+                                        console.log(finaluserdata);
                                         resp.json({
                                           success: true,
                                           message: 'Enjoy your token!',
