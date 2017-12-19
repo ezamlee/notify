@@ -108,9 +108,17 @@ router.post("/register", (req, resp) => {
                                     json: true
                                 }).then((finaluserdata) => {
                                     if (finaluserdata && parseInt(finaluserdata.count) && parseInt(finaluserdata.count) > 0) {
+
+                                        var token = jwt.sign(finaluserdata, "mysecretword", {
+
+                                        });
+                                        //set data
+                                        // return the information including token as JSON
                                         resp.json({
-                                            success: true,
-                                            message: "user successfully registered"
+                                          success: true,
+                                          message: 'Enjoy your token!',
+                                          token: token,
+                                          data:finaluserdata
                                         })
                                     } else {
                                         resp.json({
