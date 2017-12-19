@@ -89,7 +89,7 @@ router.post("/register", (req, resp) => {
                                 //userid
                                 rp({
                                     method: 'POST',
-                                    url: `http://localhost:3000/api/parents/update?where={"id":"${userid}"}`,
+                                    url: `http://localhost:3000/api/parents/upsertWithWhere?where={"id":"${userid}"}`,
                                     headers: {
                                         'content-type': 'application/json'
                                     },
@@ -107,7 +107,7 @@ router.post("/register", (req, resp) => {
                                     },
                                     json: true
                                 }).then((finaluserdata) => {
-                                    if (finaluserdata && parseInt(finaluserdata.count) && parseInt(finaluserdata.count) > 0) {
+                                    if (finaluserdata) {
 
                                         var token = jwt.sign(finaluserdata, "mysecretword", {
 
