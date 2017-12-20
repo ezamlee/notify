@@ -4,14 +4,12 @@ let validator = require('validator');
 var rp = require('request-promise');
 
 router.post("/children", function (req, resp) {
-    console.log(req.decoded);
     rp({
             uri: `http://localhost:3000/api/parents?filter[where][nid]=${req.decoded.data[0].nid}`,
             json: true,
             method: "GET"
         })
         .then((user_data) => {
-            console.log(user_data)
             resp.status(200).json({
                 success: true,
                 message: 'Children Details',
@@ -42,7 +40,6 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
         .then((tagIsValed) => {
             console.log("the code is",req.decoded)
             if (tagIsValed) {
-                console.log("the code is",req.decoded)
                 if (req.decoded.data[0].children[tagID]) {
                     req.decoded.data[0].children[tagID]["id"] = tagID
                     return req.decoded.data[0].children[tagID]
