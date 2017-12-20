@@ -40,6 +40,7 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
     let tagID = req.params.childTag;
     Promise.resolve(validator.isInt(tagID))
         .then((tagIsValed) => {
+            console.log("the code is",req.decoded)
             if (tagIsValed) {
                 console.log("the code is",req.decoded)
                 if (req.decoded.data[0].children[tagID]) {
