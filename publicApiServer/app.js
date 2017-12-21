@@ -11,7 +11,6 @@ app.set("view engine", "ejs");
 app.set("views", "./views");
 app.set('superSecret', 'mysecretword');
 //middlewear to authenticate
-
 app.use("/notsecure", require("./routers/notsecure.js"));
 //middlewear to restrict unauthorized login
 app.use("/", (req, resp, next) => {

@@ -4,10 +4,10 @@ var cors = require('cors');
 var app = express();
 var cron = require('node-cron');
 var rp = require('request-promise');
-
+var conf = require('./publicApiServer/conf/serverconf');
 function update_data() {
 	rp({
-			uri: 'https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"0e31585320d29e3db8ca8cbeab99ed5f0D7BE7ABF62C6B2B116939425C9D0537945796ED"}',
+			uri: `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"${conf.token}"}`,
 			method: "GET",
 			header: {
 				"Content-Type": "application/json",
@@ -41,11 +41,12 @@ function update_data() {
 		.then((tagsArray) => {
 			var result = tagsArray.map(function (obj) {
 				return {
-					"name": obj["n"],
+					"name"	: obj["n"],
 					"tag_id": obj["c"],
-					"bus": obj["jp"]["bus"],
+					"bus"		: obj["jp"]["bus"],
 					"bus_id": obj["jp"]["bus_id"],
-					"pnid": obj["jp"]["pnid"]
+					"pnid"	: obj["jp"]["pnid"],
+					"id" 		: obj["id"]
 				}
 			})
 			return result
@@ -65,9 +66,11 @@ function update_data() {
 						parentData = parentData[0];
 						if (!Object.keys(parentData.children).includes(element.tag_id)) {
 							parentData.children[element.tag_id] = {
-								"bus": element.bus,
-								"bus_id": element.bus_id,
-								"name": element.name
+								"bus"			: element.bus,
+								"bus_id"	: element.bus_id,
+								"name"		: element.name,
+								"id"  		: element.id,
+								"source"	: conf.source
 							}
 							rp({
 									uri: `http://localhost:3000/api/parents`,
@@ -96,3 +99,4 @@ cron.schedule('* */5 * * * *', function () {
 
 
 //server end-point to list all resources
+'cron.js'

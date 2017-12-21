@@ -24,41 +24,20 @@ router.post("/children", function (req, resp) {
             });
         })
 });
-
 router.post("/notification/:childTag", function (req, resp) {
     resp.redirect(307, `/notification/${req.params.childTag}/${10}/${0}?token=${req.query.token}`);
 })
-
 router.post("/notification/:childTag/:page", function (req, resp) {
     resp.redirect(307, `/notification/${req.params.childTag}/${req.params.page}/${0}?token=${req.query.token}`);
 })
-
 router.post("/notification/:childTag/:page/:skip", function (req, resp) {
-
-  /*
-            { name: 'Maha',
-6|app      |   pass: 'Mh111',
-6|app      |   children:
-6|app      |    { '1000': { bus: '4', bus_id: '16226557', name: 'Ahmed' },
-6|app      |      '2000': { bus: 'bus 4', bus_id: '16226557', name: 'Heba' } },
-6|app      |   loc: { long: '25.010737', lat: '30.5261475', fence_id: 3 },
-6|app      |   nid: '20450869451234',
-6|app      |   secCode: '9921560244177',
-6|app      |   passStatus: 'blocked',
-6|app      |   created_notification: false,
-6|app      |   id: '5a394145c4128359e5ef46ba',
-6|app      |   iat: 1513703274
-
-            }
-  */
 
     let tagID = req.params.childTag;
     Promise.resolve(validator.isInt(tagID))
         .then((tagIsValed) => {
-            console.log("the code is",req.decoded)
             if (tagIsValed) {
                 if (req.decoded.children[tagID]) {
-                    req.decoded.children[tagID]["id"] = tagID
+                    req.decoded.children[tagID]["id"] = tagID;
                     return req.decoded.children[tagID]
                 } else {
                     throw "cannot find the child record"
@@ -117,7 +96,6 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
             });
         })
 });
-
 router.all("*", (req, resp) => {
     resp.json({
         success: false,
