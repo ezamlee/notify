@@ -117,6 +117,7 @@ router.post("/register", (req, resp) => {
       })
     })
     .then((finaluserdata)=>{
+      console.log(finaluserdata);
       if (!finaluserdata) throw "no user is regiestered try again later";
       finaluserdata = [finaluserdata];
       var token = jwt.sign(finaluserdata, conf.secretWord, {
