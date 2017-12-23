@@ -55,7 +55,7 @@ app.post("/:sid", (req, resp) => {
                 json: true
             })
             .then((dbresp) => {
-                console.log(`the sid is ${sid} and data is ${JSON.stringify(dbresp)}`);
+                //console.log(`the sid is ${sid} and data is ${JSON.stringify(dbresp)}`);
                 socket.to(sid).emit('serverpublisher', dbresp);
                 resp.status(200).json({
                     "msg": "success"
@@ -82,7 +82,7 @@ socket.on('connection', function (socket) {
 
     socket.on("set", function (data) {
         if (data.topics && data.topics.constructor === Array && data.topics.length > 0) {
-            console.log(data.topics);
+            console.log("user topics: ",data.topics);
             data.topics.forEach((topic) => {
                 socket.join(topic)
             })
