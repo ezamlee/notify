@@ -124,8 +124,9 @@ router.post("/register", (req, resp) => {
       arr[0] = finaluserdata;
       finaluserdata = arr;
       console.log("user array" , finaluserdata);
+      console.log(finaluserdata, conf.secretWord);
+      console.log(jwt.sign(finaluserdata, conf.secretWord, {}));
       var token = jwt.sign(finaluserdata, conf.secretWord, {
-        //expiresIn: '1h'
       });
       console.log(token);
       resp.json({
