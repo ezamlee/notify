@@ -55,6 +55,7 @@ app.post("/:sid", (req, resp) => {
                 json: true
             })
             .then((dbresp) => {
+                console.log(`the sid is ${sid} and data is ${JSON.stringify(dbresp)}`);
                 socket.to(sid).emit('serverpublisher', dbresp);
                 resp.status(200).json({
                     "msg": "success"
