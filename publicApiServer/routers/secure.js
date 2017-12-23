@@ -36,7 +36,6 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
     Promise.resolve(validator.isInt(tagID))
         .then((tagIsValed) => {
             if (tagIsValed) {
-                console.log(req.decoded);
                 if (req.decoded.data[0].children[tagID]) {
                     req.decoded.data[0].children[tagID]["id"] = tagID;
                     return req.decoded.data[0].children[tagID]
@@ -49,10 +48,7 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
             }
         })
         .then((child) => {
-            console.log(
-              "child data"
-              ,req.decoded.data[0].children
-              ,req.decoded.data[0].children[child.id].loc.fence_id);
+            console.log("child data",req.decoded.data[0].children,child);
             return {
                 "bus": child.bus_id,
                 "loc": req.decoded.data[0].children[child.id].loc.fence_id,
