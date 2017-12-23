@@ -36,9 +36,10 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
     Promise.resolve(validator.isInt(tagID))
         .then((tagIsValed) => {
             if (tagIsValed) {
+                console.log(req.decoded);
                 if (req.decoded.data[0].children[tagID]) {
                     req.decoded.data[0].children[tagID]["id"] = tagID;
-                    return req.decoded.children[tagID]
+                    return req.decoded.data[0].children[tagID]
                 } else {
                     throw "cannot find the child record"
                 }
