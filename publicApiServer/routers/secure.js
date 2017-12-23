@@ -50,7 +50,8 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
         })
         .then((child) => {
             console.log(
-               req.decoded.data[0].children
+              "child data"
+              ,req.decoded.data[0].children
               ,req.decoded.data[0].children[child.id].loc.fence_id);
             return {
                 "bus": child.bus_id,
