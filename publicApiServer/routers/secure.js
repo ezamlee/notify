@@ -36,8 +36,8 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
     Promise.resolve(validator.isInt(tagID))
         .then((tagIsValed) => {
             if (tagIsValed) {
-                if (req.decoded.children[tagID]) {
-                    req.decoded.children[tagID]["id"] = tagID;
+                if (req.decoded.data[0].children[tagID]) {
+                    req.decoded.data[0].children[tagID]["id"] = tagID;
                     return req.decoded.children[tagID]
                 } else {
                     throw "cannot find the child record"
@@ -96,6 +96,57 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
             });
         })
 });
+/*
+router.post("/edit",function(req,resp) => {
+  var password  = req.body.password  || req.params.password  || req.query.password  || null;
+  var locLat    = req.body.locLat    || req.params.locLat    || req.query.locLat    || null;
+  var locLong   = req.body.loclong   || req.params.loclong   || req.query.loclong   || null;
+  var locDesc   = req.body.locDesc   || req.params.locDesc   || req.query.locDesc   || null;
+  var locId     = req.body.locId     || req.params.locId     || req.query.locId     || null;
+  var name      = req.body.name      || req.params.name      || req.query.name      || null;
+  var ope       = req.body.ope       || req.params.ope       || req.query.ope       || null;
+
+  let validDataEntered = new Promise((resolve, reject) => {
+    if(password && name && locLat && locDesc && locLong && ope && locId)
+      resolve({
+        password , name , locLat , locDesc , locLong , ope , locId
+      });
+    else reject("Missing parameters");
+  });
+
+  validDataEntered.then((userData)=>{
+    if(ope.includes(1)){
+      var x = rp({
+          uri: `http://localhost:3000/api/api/parents/upsertWithWhere?where={"nid":"${req.decoded.nid}"}`,
+          body:{
+             "name": name
+          }
+          json: true,
+          method: "GET"
+      })
+    }
+    if(ope.includes(2)){
+
+      var y = rp({
+          uri: `http://localhost:3000/api/api/parents/upsertWithWhere?where={"nid":"${req.decoded.nid}"}`,
+          body:{
+             "pass": password
+          }
+          json: true,
+          method: "GET"
+      })
+
+    }
+    if(ope.includes(3)){
+
+
+
+    }
+  })
+
+
+})
+*/
 router.all("*", (req, resp) => {
     resp.json({
         success: false,

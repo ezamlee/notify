@@ -94,9 +94,3 @@ function update_data() {
 cron.schedule('* */5 * * * *', function () {
 	update_data();
 });
-
-//make listner for each resourc
-
-
-//server end-point to list all resources
-'cron.js'
