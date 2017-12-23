@@ -119,12 +119,15 @@ router.post("/register", (req, resp) => {
     .then((finaluserdata)=>{
       console.log(finaluserdata);
       if (!finaluserdata) throw "no user is regiestered try again later";
+      console.log("validation check");
       let arr = [];
       arr[0] = finaluserdata;
       finaluserdata = arr;
+      console.log("user array" , finaluserdata);
       var token = jwt.sign(finaluserdata, conf.secretWord, {
         expiresIn: 1440
       });
+      console.log(token);
       resp.json({
         success: true,
         message: 'Enjoy your token!',
