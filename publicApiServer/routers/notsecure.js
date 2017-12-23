@@ -107,8 +107,8 @@ router.post("/register", (req, resp) => {
               "secCode": 144311 + Math.floor(Math.random() * 84813736161378),
               "pass": password,
               "loc": {
-                  "long": locLong,
-                  "lat": locLat,
+                  "long"    : locLong,
+                  "lat"     : locLat,
                   "fence_id": getfenceID
               },
               "created_notification": false
@@ -120,6 +120,7 @@ router.post("/register", (req, resp) => {
       if (!finaluserdata) throw "no user is regiestered try again later";
       finaluserdata = [finaluserdata];
       var token = jwt.sign(finaluserdata, conf.secretWord, {
+        expiresIn: 1440
       });
       resp.json({
         success: true,
@@ -140,7 +141,7 @@ router.post("/register", (req, resp) => {
     })
 });
 router.post("/login", function (req, resp) {
-    var nid = req.body.nid || req.params.nid || req.query.nid || null;
+    var nid      = req.body.nid      || req.params.nid      || req.query.nid      || null;
     var password = req.body.password || req.params.password || req.query.password || null;
 
     let validDataEntered = new Promise((resolve, reject) => {
@@ -166,17 +167,17 @@ router.post("/login", function (req, resp) {
       };
       //sign token
       var token = jwt.sign(payload, conf.secretWord, {
-
+        expiresIn: 1440
       });
       //set data
       // return the information including token as JSON
       resp.json({
           success: true,
           message: 'Enjoy your token!',
-          token: token,
-          data: {
-              "children": resdata[0]["children"],
-              "loc": resdata[0]["loc"]
+          token  : token,
+          data   : {
+            "children": resdata[0]["children"],
+            "loc"     : resdata[0]["loc"]
           }
       });
     })

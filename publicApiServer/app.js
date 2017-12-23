@@ -22,11 +22,13 @@ app.use("/", (req, resp, next) => {
             if (err) {
                 return resp.json({
                     success: false,
-                    message: 'Failed to authenticate token.'
+                    message: 'Failed to authenticate token.',
+                    err:err
                 });
             } else if (decoded) {
                 // if everything is good, save to request for use in other routes
                 req.decoded = decoded;
+                console.log(decoded)
                 next();
             }
         });

@@ -16,17 +16,17 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.post("/:sid", (req, resp) => {
-    var time = req.body.time || null;
-    var msg = req.body.msg || null;
-    var status = req.body.status || null;
-    var source = req.body.source || null;
-    var sid = req.params.sid || null;
-    var locLat = req.body.locLat || null;
-    var locLong = req.body.locLong || null;
-    var locDesc = req.body.locDesc || null;
+    var time        = req.body.time        || null;
+    var msg         = req.body.msg         || null;
+    var status      = req.body.status      || null;
+    var source      = req.body.source      || null;
+    var sid         = req.params.sid       || null;
+    var locLat      = req.body.locLat      || null;
+    var locLong     = req.body.locLong     || null;
+    var locDesc     = req.body.locDesc     || null;
     var driverPhone = req.body.driverPhone || "Not Avaliable";
-    var driverName = req.body.driverName || "Not Avaliable";
-    var speed = req.body.speed || "Not Avaliable";
+    var driverName  = req.body.driverName  || "Not Avaliable";
+    var speed       = req.body.speed       || "Not Avaliable";
 
     if (time && msg && status &&
         source && sid && locDesc &&
@@ -37,20 +37,20 @@ app.post("/:sid", (req, resp) => {
                 method: "POST",
                 header: {
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    "Accept"      : "application/json"
                 },
                 body: {
-                    "time": time,
-                    "msg": msg,
-                    "status": status,
-                    "source": source,
-                    "sid": sid,
-                    "locDesc": locDesc,
-                    "locLat": locLat,
-                    "locLong": locLong,
-                    "driverName": driverName,
-                    "driverPhone": driverPhone,
-                    "speed" : speed
+                    "time"        : time,
+                    "msg"         : msg,
+                    "status"      : status,
+                    "source"      : source,
+                    "sid"         : sid,
+                    "locDesc"     : locDesc,
+                    "locLat"      : locLat,
+                    "locLong"     : locLong,
+                    "driverName"  : driverName,
+                    "driverPhone" : driverPhone,
+                    "speed"       : speed
                 },
                 json: true
             })
