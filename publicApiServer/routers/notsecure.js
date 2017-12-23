@@ -118,6 +118,7 @@ router.post("/register", (req, resp) => {
     })
     .then((finaluserdata)=>{
       if (!finaluserdata) throw "no user is regiestered try again later";
+      finaluserdata = [finaluserdata];
       var token = jwt.sign(finaluserdata, conf.secretWord, {
       });
       resp.json({
@@ -125,8 +126,8 @@ router.post("/register", (req, resp) => {
         message: 'Enjoy your token!',
         token: token,
         data: {
-            "children": finaluserdata["children"],
-            "loc": finaluserdata["loc"]
+            "children": finaluserdata[0]["children"],
+            "loc": finaluserdata[0]["loc"]
         }
       })
 
