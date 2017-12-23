@@ -87,9 +87,9 @@ socket.on('connection', function (socket) {
             })
         }
     })
-    socket.on("castUp", function (data) {
-        socket.broadcast.emit("castDo", {
-            "action": "update_rooms"
-        })
-    })
+    // socket.on("castUp", function (data) {
+    //     socket.broadcast.emit("castDo", {
+    //         "action": "update_rooms"
+    //     })
+    // })
 });
