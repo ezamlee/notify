@@ -120,21 +120,22 @@ router.post("/register", (req, resp) => {
       if (!finaluserdata) throw "no user is regiestered try again later";
       let arr = [];
       arr[0] = finaluserdata;
-      finaluserdata = arr;
+
+      finaluserdata = {
+          status:"logged",
+          data: arr
+      }
 
       var token = jwt.sign({
             exp: Math.floor(Date.now() / 1000) + (60 * 60),
             data: finaluserdata
           }, 'secret');
+          console.log(finaluserdata);
 
       resp.json({
         success: true,
         message: 'Enjoy your token!',
-        token: token,
-        data: {
-            "children": finaluserdata[0]["children"],
-            "loc": finaluserdata[0]["loc"]
-        }
+        token: token
       })
 
     })
@@ -174,16 +175,13 @@ router.post("/login", function (req, resp) {
       var token = jwt.sign(payload, conf.secretWord, {
         expiresIn: 1440
       });
+      console.log(payload);
       //set data
       // return the information including token as JSON
       resp.json({
           success: true,
           message: 'Enjoy your token!',
-          token  : token,
-          data   : {
-            "children": resdata[0]["children"],
-            "loc"     : resdata[0]["loc"]
-          }
+          token  : token
       });
     })
     .catch(function (err) {

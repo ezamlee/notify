@@ -3,17 +3,24 @@ let router = express.Router();
 let validator = require('validator');
 var rp = require('request-promise');
 
-router.post("/children", function (req, resp) {
+router.post("/data", function (req, resp) {
     rp({
             uri: `http://localhost:3000/api/parents?filter[where][nid]=${req.decoded.data[0].nid}`,
             json: true,
             method: "GET"
         })
         .then((user_data) => {
+          console.log("user data",user_data);
+          user_data = user_data[0];
             resp.status(200).json({
                 success: true,
-                message: 'Children Details',
-                data: user_data && user_data.constructor === Array && user_data.length > 0 && user_data[0].children ? user_data[0].children : null
+                message: 'Your data',
+                data:{
+                  name:user_data.name,
+                  children:user_data.children,
+                  loc:user_data.loc,
+                  nid:user_data.nid
+                }
             });
         })
         .catch((err) => {
@@ -41,7 +48,7 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
                     req.decoded.data[0].children[tagID]["id"] = tagID;
                     return req.decoded.data[0].children[tagID]
                 } else {
-                    throw "cannot find the child record"
+                    throw "cannot find the child record or you are not allowed for this child"
                 }
             } else {
                 //return
