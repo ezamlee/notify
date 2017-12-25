@@ -126,7 +126,7 @@ router.post("/register", (req, resp) => {
           data: arr
       }
 
-      var token = jwt.sign(payload, conf.secretWord, {
+      var token = jwt.sign(finaluserdata, conf.secretWord, {
         expiresIn: 1440
       });
 
