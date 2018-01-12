@@ -1,18 +1,26 @@
 let express = require('express');
 let router = express.Router();
 let request = require("request");
-var rp = require('request-promise');
-var jwt = require("jsonwebtoken");
-var conf = require("../conf/serverconf");
+let rp = require('request-promise');
+let jwt = require("jsonwebtoken");
+let conf = require("../conf/serverconf");
+let validator = require('validator');
+
 
 router.get("/checkcode", (req, resp) => {
 
-    var nid = req.body.nid || req.params.nid || req.query.nid || null;
+    var nid        = req.body.nid        || req.params.nid        || req.query.nid        || null;
     var secureCode = req.body.secureCode || req.params.secureCode || req.query.secureCode || null;
 
     let validDataEntered = new Promise((resolve, reject) => {
-      if(nid && secureCode) resolve({nid : nid , secureCode : secureCode});
-      else reject("no nid or secure code to check");
+      if(nid && secureCode){
+
+        if(validator.isAlphanumeric(nid+secureCode))
+          resolve({nid : nid , secureCode : secureCode});
+        else {
+          reject("The Input containes illegal Characheters");
+        }
+      }else reject("no nid or secure code to check");
     });
 
     validDataEntered.then((userData) =>{
@@ -37,27 +45,37 @@ router.get("/checkcode", (req, resp) => {
     })
 })
 router.post("/register", (req, resp) => {
-    var nid = req.body.nid || req.params.nid || req.query.nid || null;
-    var secureCode = req.body.secureCode || req.params.secureCode || req.query.secureCode || null;
+    let nid        = req.body.nid        || req.params.nid        || req.query.nid        || null;
+    let secureCode = req.body.secureCode || req.params.secureCode || req.query.secureCode || null;
+    let locLat     = req.body.locLong    || req.params.locLong    || req.query.locLong    || null;
+    let locLong    = req.body.locLat     || req.params.locLat     || req.query.locLat     || null;
+    let locDesc    = req.body.locDesc    || req.params.locDesc    || req.query.locDesc    || null;
+    let name       = req.body.name       || req.params.name       || req.query.name       || null;
+    let password   = req.body.password   || req.params.password   || req.query.password   || null;
 
-    var locLat = req.body.locLong || req.params.locLong || req.query.locLong || null;
-    var locLong = req.body.locLat || req.params.locLat || req.query.locLat || null;
-    var locDesc = req.body.locDesc || req.params.locDesc || req.query.locDesc || null;
-
-    var name = req.body.name || req.params.name || req.query.name || null;
-    var password = req.body.password || req.params.password || req.query.password || null;
-    var userid = null,getfenceID=null;
+    //router Global Variables
+    let userid = null,getfenceID=null;
 
     let validDataEntered = new Promise((resolve, reject) => {
       if(nid && secureCode && locLat && locDesc && locLong && name && password)
-        resolve({
-          nid , secureCode , locLat , locLong , locDesc , name , password
-        });
+      {
+        if(validator.isAlphanumeric(nid+secureCode) && validator.isLatLong(locLat) && validator.isLatLong(locLong) ){
+          locDesc = validator.escape(locDesc);
+          name    = validator.escape(name);
+          locDesc = validator.escape(locDesc);
+          resolve({
+            nid , secureCode , locLat , locLong , locDesc , name , password
+          });
+        }
+        else{
+          reject("no nid or secure code to check");
+        }
+      }
       else reject("Missing parameters");
     });
 
     validDataEntered.then( (userCred)=>{
-      return rp({
+      return  rp({
                 uri: `http://localhost:3000/api/parents?filter[where][nid]=${userCred.nid}&filter[where][secCode]=${userCred.secureCode}&filter[where][passStatus]=register`,
                 json: true,
                 method: "GET"
@@ -150,11 +168,16 @@ router.post("/login", function (req, resp) {
     var password = req.body.password || req.params.password || req.query.password || null;
 
     let validDataEntered = new Promise((resolve, reject) => {
-      if(nid && password)
-        resolve({
-          nid , password
-        });
-      else reject("Missing parameters");
+
+      if(nid && password){
+        if(validator.isAlphanumeric(nid)){
+          resolve({
+            nid , password
+          });
+        }else{
+          reject("no nid or secure code to check");
+        }
+      }else reject("Missing parameters");
     });
 
     validDataEntered.then((userCred)=>{
@@ -165,7 +188,7 @@ router.post("/login", function (req, resp) {
               })
     })
     .then((resdata)=>{
-      if (!(resdata.length > 0)) throw "User Authentication Failed";
+      if (!(resdata.length > 0 && resdata.length < 2 )) throw "User Authentication Failed";
       const payload = {
           "status": "logged",
           "data": resdata

@@ -71,17 +71,17 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
                 req.params.skip = 0;
             }
             let getGeo = rp({
-                uri: `http://localhost:3000/api/notifications?filter[where][sid]=${ids.loc}&filter[limit]=${req.params.page}&filter[skip]=${req.params.skip}&filter[DESC]=time`,
+                uri: `http://localhost:3000/api/notifications?filter[where][sid]=${ids.loc}&filter[limit]=${req.params.page}&filter[skip]=${req.params.skip}&filter[order][0]=time DESC`,
                 json: true,
                 method: "GET"
             });
             let getTag = rp({
-                uri: `http://localhost:3000/api/notifications?filter[where][sid]=${ids.tag}&&filter[limit]=${req.params.page}&filter[skip]=${req.params.skip}&filter[DESC]=time`,
+                uri: `http://localhost:3000/api/notifications?filter[where][sid]=${ids.tag}&&filter[limit]=${req.params.page}&filter[skip]=${req.params.skip}&filter[order][0]=time DESC`,
                 json: true,
                 method: "GET"
             });
             let getBus = rp({
-                uri: `http://localhost:3000/api/notifications?filter[where][sid]=${ids.bus}&&filter[limit]=${req.params.page}&filter[skip]=${req.params.skip}&filter[DESC]=time`,
+                uri: `http://localhost:3000/api/notifications?filter[where][sid]=${ids.bus}&&filter[limit]=${req.params.page}&filter[skip]=${req.params.skip}&filter[order][0]=time DESC`,
                 json: true,
                 method: "GET"
             });
