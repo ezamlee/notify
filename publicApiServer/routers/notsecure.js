@@ -109,6 +109,7 @@ router.post("/register", (req, resp) => {
               "loc": {
                   "long"    : locLong,
                   "lat"     : locLat,
+                  "desc"    : locDesc,
                   "fence_id": getfenceID
               },
               "created_notification": false
