@@ -159,7 +159,7 @@ router.post("/register", (req, resp) => {
       //send verify mail to user where to verify mail
       var message = {
         from: 'schooltrackingsystems@gmail.com',
-        to: 'a.m.essam1992@gmail.com',
+        to: email,
         subject: 'Message title',
         text: 'Plaintext version of the message',
         html:
