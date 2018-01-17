@@ -1,3 +1,5 @@
 node_modules/
 publicApiServer/node_modules
 database/resources/node_modules
+keys
+publicApiServer/conf/

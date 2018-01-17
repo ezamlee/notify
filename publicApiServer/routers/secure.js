@@ -2,7 +2,129 @@ let express = require('express');
 let router = express.Router();
 let validator = require('validator');
 var rp = require('request-promise');
+var cors = require("cors");
 
+router.get("/verify",function(req, resp){
+  Promise.resolve(()=>{
+    console.log(req.decoded);
+    if(req.decoded.type != "verify") throw "wrong token sent"
+    else{
+      return true
+    }}
+  ).then((render)=>{
+    if(render){
+      resp.status(200).render("verify",{});
+    }
+  }).catch((error)=>{
+    resp.json({
+        success: false,
+        message: error
+    });
+  })
+})
+router.post("/verify",function(req,resp){
+  let password    = req.body.password    || req.params.password    || req.query.password    || null;
+  let nid         = req.decoded.nid
+
+  rp({
+    uri: `http://localhost:3000/api/parents?filter[where][nid]=${nid}&filter[where][pass]=${password}&filter[where][passStatus]=verify`,
+    json: true,
+    method: "GET"
+  }).then((data)=>{
+    if(data.length != 1) throw "User not allowed to verify"
+    data = data[0];
+    return rp({
+        method: 'POST',
+        url: `http://localhost:3000/api/parents/upsertWithWhere?where={"id":"${data.id}"}`,
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: {
+            "passStatus": "blocked",
+        },
+        json: true
+    })
+  }).then((data)=>{
+    console.log(data)
+    if(!data.nid) throw "User is not verified"
+    resp.json({
+        success: true,
+        message: "user email verified"
+    });
+  }).catch((error)=>{
+    resp.json({
+        success: false,
+        message: error
+    });
+  })
+
+})
+router.get("/reset",function(req,resp){
+  Promise.resolve(()=>{
+    console.log(req.decoded);
+    if(req.decoded.type != "reset") throw "wrong token sent"
+    else{
+      return true
+    }}
+  ).then((isCorrectToken)=>{
+    if(!isCorrectToken) throw "Wrong token"
+    return rp({
+        uri: `http://localhost:3000/api/parents/upsertWithWhere?where={"nid":"${req.decoded.nid}"}`,
+        json: true,
+        method: "POST",
+        body:{
+          "passStatus":"reset"
+        }
+    })
+  }).then((user_data)=>{
+      console.log(user_data)
+      resp.status(200).render("reset",{});
+  }).catch((error)=>{
+    resp.json({
+        success: false,
+        message: error
+    });
+  })
+})
+router.post("/reset",function(req,resp){
+  let nid = req.decoded.nid || null;
+  let password = req.body.password || req.params.password || req.query.password || null;
+  Promise.resolve(function(){
+    if(nid && passwrd) return true
+    else throw "Missing Params"
+  }).then(()=>{
+    return rp({
+      uri:`http://localhost:3000/api/parents/upsertWithWhere?where={"nid":"${nid}" , "passStatus":"reset"}`,
+      json:true,
+      method:"POST",
+      body:{
+        pass:password,
+        passStatus:"blocked"
+      }
+    })
+  }).then((data)=>{
+    if(!data) throw "failed to change password"
+    resp.json({
+      success:true,
+      message:"Password Changed Successfully"
+    })
+  }).catch((error)=>{
+    resp.json({
+      success:false,
+      message:"failed",
+      error:error
+    })
+  })
+})
+router.use("/",function(req,resp,next){
+  if (req.decoded.type == "login" ||req.decoded.type == "register" )
+    next();
+  else
+    resp.json({
+        success: false,
+        message: 'Using Wrong Token'
+    });
+})
 router.post("/data", function (req, resp) {
     rp({
             uri: `http://localhost:3000/api/parents?filter[where][nid]=${req.decoded.data[0].nid}`,
@@ -10,8 +132,8 @@ router.post("/data", function (req, resp) {
             method: "GET"
         })
         .then((user_data) => {
-          console.log("user data",user_data);
           user_data = user_data[0];
+          console.log("user data",user_data);
             resp.status(200).json({
                 success: true,
                 message: 'Your data',
@@ -19,7 +141,9 @@ router.post("/data", function (req, resp) {
                   name:user_data.name,
                   children:user_data.children,
                   loc:user_data.loc,
-                  nid:user_data.nid
+                  nid:user_data.nid,
+                  email:user_data.email,
+                  phone:user_data.phone
                 }
             });
         })

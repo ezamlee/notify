@@ -3,14 +3,20 @@ var app = express();
 var jwt = require("jsonwebtoken");
 var bodyParser = require('body-parser');
 var cors = require("cors");
+var conf = require("./conf/serverconf");
+var corsOptions = {
+  origin: 'http://localhost:9876',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", "./views");
-app.set('superSecret', 'mysecretword');
 //middlewear to authenticate
+
 app.use("/notsecure", require("./routers/notsecure.js"));
 //middlewear to restrict unauthorized login
 app.use("/", (req, resp, next) => {
@@ -18,7 +24,7 @@ app.use("/", (req, resp, next) => {
     // decode token
     if (token) {
         // verifies secret and checks exp
-        jwt.verify(token, app.get('superSecret'), function (err, decoded) {
+        jwt.verify(token, conf.secretWord, function (err, decoded) {
             if (err) {
                 return resp.json({
                     success: false,

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Verify your mail</title>
+  </head>
+  <body>
+    <label>Password</label><br>
+    <input id="password" type="text" placeholder="Enter your password"><br>
+    <button onclick="regMe()">Verify</button><br>
+  </body>
+  <script
+			  src="https://code.jquery.com/jquery-3.2.1.min.js"
+			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			  crossorigin="anonymous">
+  </script>
+  <script>
+    var queryArray  = window.location.search.substr(1,window.location.search.length).split("=");
+    var token = (queryArray)[queryArray.indexOf("token")+1];
+    console.log(`http://${window.location.hostname}:9876/verify?token=${token}&password=${$('#password').val()}`)
+    var regMe = function(){
+      $.ajax({
+        method  : "POST",
+        url     : `http://${window.location.hostname}:9876/verify?token=${token}&password=${$('#password').val()}`,
+        crossDomain: true,
+        success : (data)=>$("body").html(`<p>${JSON.stringify(data)}</p>`),
+        failed  : (error)=>$("body").html("<p>failed to register</p>")
+      })
+    }
+  </script>
+</html>
