@@ -6,7 +6,7 @@ let jwt = require("jsonwebtoken");
 let conf = require("../conf/serverconf");
 let validator = require('validator');
 let nodemailer = require('nodemailer');
-var host = conf.cycle == "dev" ? "localhost:9876" : "ec2-18-220-223-50.us-east-2.compute.amazonaws.com:9876/"
+var host = conf.cycle == "dev" ? "localhost:9876" : "ec2-18-220-223-50.us-east-2.compute.amazonaws.com:9876"
 let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
