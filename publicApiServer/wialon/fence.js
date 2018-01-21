@@ -26,7 +26,7 @@ function fenceModule() {
         url: 'https://hst-api.wialon.com/wialon/ajax.html',
         qs: {
           svc: 'resource/update_zone',
-          params: `{\n"itemId":${conf.source},\n"id":0,\n"w":500,\n"callMode":"create",\n"n": "${name} home",\n"d": "${locDesc}",\n"t": 3,\n"tc":16711884,\n"ts":12,\n"f": 48,\n"path":"",\n"p":[{"x": ${parseFloat(locLat)}, "y": ${parseFloat(locLong)}, "r": ${r}}],\n"c": 2566914048,\n"ts":20,\n"min":0,\n"max":18,\n"b":{\n    "min_x":${parseFloat(locLat)},\n    "min_y":${parseFloat(locLong)},\n    "max_x":${parseFloat(locLat)},\n    "max_y":${parseFloat(locLong)},\n    "cen_x":${parseFloat(locLat)},\n    "cen_y":${parseFloat(locLong)}\n    },\n"libId": 0,\n"i": 4294967295\n}`,
+          params: `{\n"itemId":${conf.source},\n"id":0,\n"w":${r},\n"callMode":"create",\n"n": "${name} home",\n"d": "${locDesc}",\n"t": 3,\n"tc":16711884,\n"ts":12,\n"f": 48,\n"path":"",\n"p":[{"x": ${parseFloat(locLat)}, "y": ${parseFloat(locLong)}, "r": ${r}}],\n"c": 2566914048,\n"ts":20,\n"min":0,\n"max":18,\n"b":{\n    "min_x":${parseFloat(locLat)},\n    "min_y":${parseFloat(locLong)},\n    "max_x":${parseFloat(locLat)},\n    "max_y":${parseFloat(locLong)},\n    "cen_x":${parseFloat(locLat)},\n    "cen_y":${parseFloat(locLong)}\n    },\n"libId": 0,\n"i": 4294967295\n}`,
           sid: `${mySession.eid}`
         },
         headers: {
@@ -35,7 +35,6 @@ function fenceModule() {
       })
 
       /* returned
-
       [
         4 ,
         {
@@ -64,8 +63,48 @@ function fenceModule() {
       ]
       */
     }
-    ,deleteFence: function() {
-    }
+    ,updateFence: async function(obj) {
+
+      //locDesc , locLat , locLong , id , name ,r
+      let id = obj.id           || null;
+      let name = obj.name       || null;
+      let locLat = obj.locLat   || null;
+      let locLong = obj.locLong || null;
+      let locDesc = obj.locDesc || null;
+      let r = obj.r             || 500;
+
+      mySession = JSON.parse(await session.getSession());
+      if (mySession.error) throw "unable to get session please verify token and try again later"
+
+      return rp({
+        method: 'GET',
+        url: 'https://hst-api.wialon.com/wialon/ajax.html',
+        headers: {'Cache-Control': 'no-cache' },
+        qs: { svc: 'resource/update_zone',
+              params: `{
+                  "itemId":${parseInt(conf.source)},
+                  "id":${parseInt(id)},
+                  "n":"${name}",
+                  "d":"${locDesc}",
+                  "t":3,
+                  "w":${parseInt(r)},
+                  "f":48,
+                  "c":2566914048,
+                  "callMode":"update",
+                  "p":[{"x": ${parseFloat(locLat)}, "y": ${parseFloat(locLong)}, "r": ${parseInt(r)}}],
+                  "b":{
+                      "min_x":${parseFloat(locLat)},
+                      "min_y":${parseFloat(locLong)},
+                      "max_x":${parseFloat(locLat)},
+                      "max_y":${parseFloat(locLong)},
+                      "cen_x":${parseFloat(locLat)},
+                      "cen_y":${parseFloat(locLong)}
+                      }
+              }`,
+              sid: `${mySession.eid}` 
+            }
+      })
+    } 
   }
 }
 

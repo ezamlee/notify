@@ -4,6 +4,10 @@ let validator = require('validator');
 var rp = require('request-promise');
 var cors = require("cors");
 let conf = require("../conf/serverconf");
+let fence = require("../wialon/fence");
+let mail = require("../mail/mail");
+let jwt = require("jsonwebtoken");
+var host = conf.cycle == "dev" ? "localhost:9876" : "ec2-18-220-223-50.us-east-2.compute.amazonaws.com:9876"
 
 router.get("/verify",function(req, resp){
   Promise.resolve(()=>{
@@ -243,31 +247,95 @@ router.post("/notification/:childTag/:page/:skip", function (req, resp) {
 //under developement
 router.post("/edit",function(req,resp)  {
 
-  var edit = req.body.NewData || req.query.NewData || null;
   var user_nid = req.decoded.data[0].nid;
 
-  /*
-    user can Change
-    1- Password
-    2- Name
-    3- Phone
-    4- E-mail
-    5- loc params
-      5.1 : Long
-      5.2 : Lat
-      5.3 : Desc
-  */
+  var oldFence = null;
+  var userData = null;
+  var newFence = null;
+
   rp({
-    uri: `http://localhost:3000/api/parents?filter[where][nid]=${req.decoded.data[0].nid}`,
+    uri: `http://localhost:3000/api/parents?filter[where][nid]=${req.decoded.data[0].nid}&&filter[where][passStatus]=blocked`,
     json: true,
     method: "GET"
   })
   .then((data) =>{
     if(data.length !== 1) throw "no user AVALIABLE";
-    data = data[0];
+    userData = data[0];
+    oldFence = userData.loc
+    //update Loc
+    if(req.body.loc){
+      return fence.updateFence({
+          name: userData.name,
+          locLat:req.body.loc.locLat   || oldFence.locLat,
+          locLong:req.body.loc.locLong || oldFence.locLong,
+          r:req.body.loc.r             || 500,
+          locDesc:req.body.loc.locDesc || oldFence.locDesc,
+          id:oldFence.fence_id
+      })
+    } 
+  })
+  .then((data)=>{
 
-    console.log(data)
+    if(req.body.email){
 
+        var mailToken = jwt.sign({
+          nid: userData.nid ,
+          name: userData.name ,
+          phone :req.body.phone || userData.phone ,
+          email: req.body.email || userData.email,
+          type:"verify"
+          }, conf.secretWord, {
+            expiresIn: 172800
+          }
+        );
+        console.log(req.body.email)
+        return  mail.sendMessage({
+           msg:`please verify your mail by going to http://${host}/verify?token=${mailToken}`
+          ,html:
+          `
+            <p>Go to link to verify your account :
+                <a href="http://${host}/verify?token=${mailToken}">
+                  Click Here
+                </a>
+            </p>
+          `
+          ,email:req.body.email
+        })
+    }
+  })
+  .then((data)=> {
+    return  rp({
+              method: 'POST',
+              url: `http://localhost:3000/api/parents/upsertWithWhere?where={"nid":"${user_nid}"}`,
+              headers: {
+                'content-type': 'application/json'
+              },
+              body: {
+                "loc": {
+                    locLat:  (req.body.loc) ?  req.body.loc.locLat : oldFence.locLat,
+                    locLong: (req.body.loc) ?  req.body.loc.locLong : oldFence.locLong,
+                    locDesc: (req.body.loc) ?  req.body.loc.locDesc : oldFence.locDesc,
+                    fence_id: oldFence.fence_id
+              },
+              "email": req.body.email || userData.email,
+              "passStatus": (req.body.email) ? "verify" : "blocked",
+              "pass": req.body.pass || userData.pass,
+              "phone": req.body.phone || userData.phone
+            },
+            json: true
+          })
+  })
+  .then((data) =>{
+    delete data.pass
+    delete data.created_notification
+    delete data.passStatus
+    delete data.secCode
+    
+    resp.json({
+      success:true,
+      message: "done",
+      data:data
+    })
   })
   .catch((error) => {
     resp.json({
@@ -275,7 +343,6 @@ router.post("/edit",function(req,resp)  {
       message: error
     });
   })
-
 })
 
 router.all("*", (req, resp) => {
