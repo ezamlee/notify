@@ -15,37 +15,31 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", "./views");
-//middlewear to authenticate
 
 app.use("/notsecure", require("./routers/notsecure.js"));
-//middlewear to restrict unauthorized login
 app.use("/", (req, resp, next) => {
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
-    // decode token
-    if (token) {
-        // verifies secret and checks exp
-        jwt.verify(token, conf.secretWord, function (err, decoded) {
-            if (err) {
-                return resp.json({
-                    success: false,
-                    message: 'Failed to authenticate token.',
-                    err:err
-                });
-            } else if (decoded) {
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                console.log(decoded)
-                next();
-            }
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  if (token) {
+    jwt.verify(token, conf.secretWord, function(err, decoded) {
+      if (err) {
+        return resp.json({
+          success: false,
+          message: 'Failed to authenticate token.',
+          err: conf.cycle == "dev" ? err : ""
         });
-    } else {
-        // if there is no token
-        // return an error
-        return resp.status(403).send({
-            success: false,
-            message: 'No token provided.'
-        });
-    }
+      } else if (decoded) {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;
+        next();
+      }
+    });
+  }
+  else {
+    return resp.status(403).send({
+      success: false,
+      message: 'No token provided.'
+    });
+  }
 })
 app.use("/", require("./routers/secure.js"));
 app.listen(9876, () => console.log('Example app listening on port 9876!'))

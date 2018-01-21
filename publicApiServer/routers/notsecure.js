@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 let request = require("request");
 let rp = require('request-promise');
+let fence = require('../wialon/fence');
 let jwt = require("jsonwebtoken");
 let conf = require("../conf/serverconf");
 let validator = require('validator');
@@ -94,29 +95,14 @@ router.post("/register", (req, resp) => {
       if (!(resdata.length > 0 && resdata.length < 2)) throw "User is Not Allowed to Register with system";
       resdata = resdata[0];
       userid = resdata.id;
-      return rp({
-                method: 'GET',
-                url: 'https://hst-api.wialon.com/wialon/ajax.html',
-                qs: {
-                    svc: 'token/login',
-                    params:`{"token":"${conf.token}"}`
-                  }
-              })
-    })
-    .then((getTokenResp)=>{
-      getTokenResp = JSON.parse(getTokenResp);
-      if(!getTokenResp["eid"]) throw "unable to connect the backend try again later";
-      sesssion_id = getTokenResp["eid"];
-      return  rp({
-                  method: 'GET',
-                  url: 'https://hst-api.wialon.com/wialon/ajax.html',
-                  qs: {
-                      svc: 'resource/update_zone',
-                      params: `{\n"itemId":${conf.source},\n"id":0,\n"w":500,\n"callMode":"create",\n"n": "${name} home",\n"d": "${locDesc}",\n"t": 3,\n"tc":16711884,\n"ts":12,\n"f": 48,\n"path":"",\n"p":[{"x": ${parseFloat(locLat)}, "y": ${parseFloat(locLong)}, "r": 500}],\n"c": 2566914048,\n"ts":20,\n"min":0,\n"max":18,\n"b":{\n    "min_x":${parseFloat(locLat)},\n    "min_y":${parseFloat(locLong)},\n    "max_x":${parseFloat(locLat)},\n    "max_y":${parseFloat(locLong)},\n    "cen_x":${parseFloat(locLat)},\n    "cen_y":${parseFloat(locLong)}\n    },\n"libId": 0,\n"i": 4294967295\n}`,
-                      sid: `${sesssion_id}`
-                  },
-                  headers: { 'cache-control': 'no-cache'  }
-              })
+
+      return fence.createFence({
+        name,
+        locLat,
+        locLat,
+        r:500,
+        locDesc
+      })
     })
     .then((getGeoRes)=>{
       getfenceID = JSON.parse(getGeoRes)[0];
@@ -255,12 +241,12 @@ router.post("/login", function (req, resp) {
 });
 router.post('/reset',function(req,resp){
   var nid = req.body.nid || req.query.nid || req.params.nid || null
-
   rp({
               uri: `http://localhost:3000/api/parents?filter[where][nid]=${nid}&filter[where][passStatus]=blocked`,
               json: true,
               method: "GET"
-  }).then((data)=>{
+  })
+  .then((data)=>{
     console.log(data)
     if (data.length != 1) throw "You Maybe have requested for password reset before pleae check your mail or contact admin"
     //create mail token
@@ -304,7 +290,8 @@ router.post('/reset',function(req,resp){
       },
       json: true
     })
-  }).then((data)=>{
+  })
+  .then((data)=>{
     if(!data || !data.passStatus == "requested" ) throw "failed to Reset"
     resp.json({
         success: true,
