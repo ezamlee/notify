@@ -19,7 +19,7 @@ router.get("/verify",function(req, resp){
   )
   .then((render)=>{
     if(render){
-      resp.status(200).render("verify",{});
+      resp.status(200).render("./verify",{});
     }
   })
   .catch((error)=>{
@@ -272,7 +272,7 @@ router.post("/edit",function(req,resp)  {
           locDesc:req.body.loc.locDesc || oldFence.locDesc,
           id:oldFence.fence_id
       })
-    } 
+    }
   })
   .then((data)=>{
 
@@ -330,7 +330,7 @@ router.post("/edit",function(req,resp)  {
     delete data.created_notification
     delete data.passStatus
     delete data.secCode
-    
+
     resp.json({
       success:true,
       message: "done",
