@@ -64,7 +64,6 @@ function fenceModule() {
       */
     }
     ,updateFence: async function(obj) {
-
       //locDesc , locLat , locLong , id , name ,r
       let id = obj.id           || null;
       let name = obj.name       || null;
@@ -77,34 +76,38 @@ function fenceModule() {
       if (mySession.error) throw "unable to get session please verify token and try again later"
 
       return rp({
+        url:`https://hst-api.wialon.com/wialon/ajax.html?svc=resource/update_zone&params={
+        "itemId":${parseInt(conf.source)},
+        "id":${parseInt(id)},
+        "w":${parseInt(r)},
+        "callMode":"update",
+        "n": "${name}",
+        "d": "${locDesc}ة",
+        "t": 3,
+        "tc":16711884,
+        "ts":12,
+        "f": 48,
+        "path":"",
+        "p":[{"x": ${parseFloat(locLat)}, "y": ${parseFloat(locLong)}, "r": ${parseInt(r)}}],
+        "c": 2566914048,
+        "ts":20,
+        "min":0,
+        "max":18,
+        "b":{
+            "min_x":${parseFloat(locLat)},
+            "min_y":${parseFloat(locLong)},
+            "max_x":${parseFloat(locLat)},
+            "max_y":${parseFloat(locLong)},
+            "cen_x":${parseFloat(locLat)},
+            "cen_y":${parseFloat(locLong)}
+            },
+        "libId": 0,
+        "i": 4294967295
+      }&sid=${mySession.eid}`,
         method: 'GET',
-        url: 'https://hst-api.wialon.com/wialon/ajax.html',
-        headers: {'Cache-Control': 'no-cache' },
-        qs: { svc: 'resource/update_zone',
-              params: `{
-                  "itemId":${parseInt(conf.source)},
-                  "id":${parseInt(id)},
-                  "n":"${name}",
-                  "d":"${locDesc}",
-                  "t":3,
-                  "w":${parseInt(r)},
-                  "f":48,
-                  "c":2566914048,
-                  "callMode":"update",
-                  "p":[{"x": ${parseFloat(locLat)}, "y": ${parseFloat(locLong)}, "r": ${parseInt(r)}}],
-                  "b":{
-                      "min_x":${parseFloat(locLat)},
-                      "min_y":${parseFloat(locLong)},
-                      "max_x":${parseFloat(locLat)},
-                      "max_y":${parseFloat(locLong)},
-                      "cen_x":${parseFloat(locLat)},
-                      "cen_y":${parseFloat(locLong)}
-                      }
-              }`,
-              sid: `${mySession.eid}` 
-            }
+        headers: {'Cache-Control': 'no-cache' }
       })
-    } 
+    }
   }
 }
 

@@ -37,29 +37,13 @@ var userData = {
   }
 var req = {}
 req.body = {
-	
-    "email" :"a.m.essam1992@gmail.com"
+
+    "locLong" : "32",
+    "locLat"  : "32",
+    "locDesc" : "s",
+    "id"      : 4  ,
+    "name"    : "a"
 
 }
-        var mailToken = jwt.sign({
-          nid: userData.nid ,
-          name: userData.name ,
-          phone :req.body.phone || userData.phone ,
-          email: req.body.email || userData.email,
-          type:"verify"
-          }, conf.secretWord, {
-            expiresIn: 172800
-          }
-        );
-        mail.sendMessage({
-           msg:`please verify your mail by going to http://${host}/verify?token=${mailToken}`
-          ,html:
-          `
-            <p>Go to link to verify your account :
-                <a href="http://${host}/verify?token=${mailToken}">
-                  Click Here
-                </a>
-            </p>
-          `
-          ,email:req.body.email
-        })//.then((data) => console.log("data is: ",data)).catch((error) => console.log("error is: ",error));
+
+fence.updateFence(req.body).then(data => console.log(data))
