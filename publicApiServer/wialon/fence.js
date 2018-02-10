@@ -64,7 +64,6 @@ function fenceModule() {
       */
     }
     ,updateFence: async function(obj) {
-      console.log(JSON.stringify(obj));
       //locDesc , locLat , locLong , id , name ,r
       let id = obj.id           || null;
       let name = obj.name       || null;
@@ -72,42 +71,8 @@ function fenceModule() {
       let locLong = obj.locLong || null;
       let locDesc = obj.locDesc || null;
       let r = obj.r             || 500;
-
       mySession = JSON.parse(await session.getSession());
-
-      console.log(mySession);
-
       if (mySession.error) throw "unable to get session please verify token and try again later"
-
-      console.log(`https://hst-api.wialon.com/wialon/ajax.html?svc=resource/update_zone&params={
-      "itemId":${parseInt(conf.source)},
-      "id":${parseInt(id)},
-      "w":${parseInt(r)},
-      "callMode":"update",
-      "n": "${name}",
-      "d": "${locDesc}ة",
-      "t": 3,
-      "tc":16711884,
-      "ts":12,
-      "f": 48,
-      "path":"",
-      "p":[{"x": ${parseFloat(locLat)}, "y": ${parseFloat(locLong)}, "r": ${parseInt(r)}}],
-      "c": 2566914048,
-      "ts":20,
-      "min":0,
-      "max":18,
-      "b":{
-          "min_x":${parseFloat(locLat)},
-          "min_y":${parseFloat(locLong)},
-          "max_x":${parseFloat(locLat)},
-          "max_y":${parseFloat(locLong)},
-          "cen_x":${parseFloat(locLat)},
-          "cen_y":${parseFloat(locLong)}
-          },
-      "libId": 0,
-      "i": 4294967295
-    }&sid=${mySession.eid}`);
-
       return rp({
         url:`https://hst-api.wialon.com/wialon/ajax.html?svc=resource/update_zone&params={
         "itemId":${parseInt(conf.source)},
