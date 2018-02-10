@@ -46,4 +46,4 @@ req.body = {
 
 }
 
-fence.updateFence(req.body).then(data => console.log(data))
+fence.updateFence(req.body).then(data => console.log(data)).catch( err => console.log(err))
