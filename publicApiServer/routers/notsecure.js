@@ -118,9 +118,9 @@ router.post("/register", (req, resp) => {
               "secCode": 144311 + Math.floor(Math.random() * 84813736161378),
               "pass": password,
               "loc": {
-                "long"    : locLong,
-                "lat"     : locLat,
-                "desc"    : locDesc,
+                "loclong"    : locLong,
+                "locLat"     : locLat,
+                "locDesc"    : locDesc,
                 "fence_id": getfenceID
               },
               "created_notification": false,
