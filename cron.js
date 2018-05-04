@@ -30,12 +30,11 @@ function update_data() {
 			})
 		})
 		.then((resources) => {
-			
-			if(resources){
+			console.log(resources);
+			if(resources && resources.items){
 				console.log(resources,resources.items[1])
 				return resources.items[1].tags
 			}
-				
 		})
 		.then((tags) => {
 			console.log(tags)
