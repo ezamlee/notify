@@ -30,8 +30,12 @@ function update_data() {
 			})
 		})
 		.then((resources) => {
-			console.log(resources,resources.items[1])
-			return resources.items[1].tags
+			
+			if(resources){
+				console.log(resources,resources.items[1])
+				return resources.items[1].tags
+			}
+				
 		})
 		.then((tags) => {
 			console.log(tags)
