@@ -99,6 +99,6 @@ function update_data() {
 		.catch((err) => console.log(err))
 }
 
-cron.schedule('*/5 * * * * *', function () {
+cron.schedule('* */5 * * * *', function () {
 	update_data();
 });
