@@ -30,9 +30,11 @@ function update_data() {
 			})
 		})
 		.then((resources) => {
+			console.log(resources,resources.items[1])
 			return resources.items[1].tags
 		})
 		.then((tags) => {
+			console.log(tags)
 			var result = Object.keys(tags).map(function (key) {
 				return tags[key];
 			});
@@ -52,6 +54,7 @@ function update_data() {
 			return result
 		})
 		.then((tagsArray) => {
+			console.log(tagsArray)
 			tagsArray.forEach((element) => {
 				rp({
 					uri: `http://localhost:3000/api/parents?filter[where][nid]=${element.pnid}`,
@@ -64,6 +67,7 @@ function update_data() {
 				}).then((parentData) => {
 					if (parentData.length > 0) {
 						parentData = parentData[0];
+						console.log(Object.keys(parentData.children ,element.tag_id ));
 						if (!Object.keys(parentData.children).includes(element.tag_id)) {
 							parentData.children[element.tag_id] = {
 								"bus"			: element.bus,
@@ -85,12 +89,12 @@ function update_data() {
 								.then((success) => {}).catch((err) => {})
 						}
 					}
-				}).catch((err) => {})
+				}).catch((err) => console.log(err))
 			})
 		})
-		.catch((err) => {})
+		.catch((err) => console.log(err))
 }
 
-cron.schedule('* */5 * * * *', function () {
+cron.schedule('*/5 * * * * *', function () {
 	update_data();
 });
