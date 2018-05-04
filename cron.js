@@ -16,6 +16,7 @@ function update_data() {
 			json: true
 		})
 		.then((wialonResp) => {
+			console.log(wialonResp,wialonResp.eid)
 			return wialonResp.eid
 		})
 		.then((eid) => {
