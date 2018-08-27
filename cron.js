@@ -48,17 +48,19 @@ function update_data() {
 			}
 		})
 		.then((tagsArray) => {
-			var result = tagsArray.map(function (obj) {
-				return {
-					"name": obj["n"],
-					"tag_id": obj["c"],
-					"bus": obj["jp"]["bus"],
-					"bus_id": obj["jp"]["bus_id"],
-					"pnid": obj["jp"]["pnid"],
-					"id": obj["id"]
-				}
-			})
-			return result
+			if(tagsArray){
+				var result = tagsArray.map(function (obj) {
+					return {
+						"name": obj["n"],
+						"tag_id": obj["c"],
+						"bus": obj["jp"]["bus"],
+						"bus_id": obj["jp"]["bus_id"],
+						"pnid": obj["jp"]["pnid"],
+						"id": obj["id"]
+					}
+				})
+				return result
+			}
 		})
 		.then((tagsArray) => {
 			console.log(tagsArray)
