@@ -48,7 +48,7 @@ function update_data() {
 			}
 		})
 		.then((tagsArray) => {
-			if(tagsArray){
+			if (tagsArray) {
 				var result = tagsArray.map(function (obj) {
 					return {
 						"name": obj["n"],
@@ -64,42 +64,44 @@ function update_data() {
 		})
 		.then((tagsArray) => {
 			console.log(tagsArray)
-			tagsArray.forEach((element) => {
-				rp({
-					uri: `http://localhost:3000/api/parents?filter[where][nid]=${element.pnid}`,
-					method: "GET",
-					header: {
-						"Content-Type": "application/json",
-						"Accept": "application/json"
-					},
-					json: true
-				}).then((parentData) => {
-					if (parentData.length > 0) {
-						parentData = parentData[0];
-						console.log(Object.keys(parentData.children, element.tag_id));
-						if (!Object.keys(parentData.children).includes(element.tag_id)) {
-							parentData.children[element.tag_id] = {
-								"bus": element.bus,
-								"bus_id": element.bus_id,
-								"name": element.name,
-								"id": element.id,
-								"source": conf.source
+			if (tagsArray) {
+				tagsArray.forEach((element) => {
+					rp({
+						uri: `http://localhost:3000/api/parents?filter[where][nid]=${element.pnid}`,
+						method: "GET",
+						header: {
+							"Content-Type": "application/json",
+							"Accept": "application/json"
+						},
+						json: true
+					}).then((parentData) => {
+						if (parentData.length > 0) {
+							parentData = parentData[0];
+							console.log(Object.keys(parentData.children, element.tag_id));
+							if (!Object.keys(parentData.children).includes(element.tag_id)) {
+								parentData.children[element.tag_id] = {
+									"bus": element.bus,
+									"bus_id": element.bus_id,
+									"name": element.name,
+									"id": element.id,
+									"source": conf.source
+								}
+								rp({
+									uri: `http://localhost:3000/api/parents`,
+									method: "PUT",
+									header: {
+										"Content-Type": "application/json",
+										"Accept": "application/json"
+									},
+									body: parentData,
+									json: true
+								})
+									.then((success) => { }).catch((err) => { })
 							}
-							rp({
-								uri: `http://localhost:3000/api/parents`,
-								method: "PUT",
-								header: {
-									"Content-Type": "application/json",
-									"Accept": "application/json"
-								},
-								body: parentData,
-								json: true
-							})
-								.then((success) => { }).catch((err) => { })
 						}
-					}
-				}).catch((err) => console.log(err))
-			})
+					}).catch((err) => console.log(err))
+				})
+			}
 		})
 		.catch((err) => console.log(err))
 }
