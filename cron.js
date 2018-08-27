@@ -7,7 +7,7 @@ var rp = require('request-promise');
 var conf = require('./publicApiServer/conf/serverconf');
 function update_data() {
 	rp({
-		uri: `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"0e31585320d29e3db8ca8cbeab99ed5f8FF39C43F147343E1164472619A14ADA69B535B7"}`,
+		uri: `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"${conf.token}"}`,
 		method: "GET",
 		header: {
 			"Content-Type": "application/json",
@@ -16,7 +16,7 @@ function update_data() {
 		json: true
 	})
 		.then((wialonResp) => {
-			console.log(wialonResp, wialonResp.eid)
+			console.log("from wialon wialonResp------------>",wialonResp,"\nfrom wialon wialonResp.eid------------>" ,wialonResp.eid)
 			return wialonResp.eid
 		})
 		.then((eid) => {
