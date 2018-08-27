@@ -1,4 +1,5 @@
 var conf  = require("../conf/serverconf");
+
 let rp = require('request-promise');
 
 function sessionModule(){
@@ -13,8 +14,7 @@ function sessionModule(){
       *
       */
       console.log(lastsid);
-      console.log(conf.token);
-      
+      console.log(conf)
       return rp({
         method: 'GET',
         url: 'https://hst-api.wialon.com/wialon/ajax.html',
