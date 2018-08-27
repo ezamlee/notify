@@ -136,7 +136,7 @@ router.post("/register", (req, resp) => {
           json: true
       })
     })
-    .then(( )=>{
+    .then(( finaluserdata)=>{
       console.log("final user data",finaluserdata)
       if (!finaluserdata) throw "no user is regiestered try again later";
       let arr = [];
