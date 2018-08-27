@@ -106,7 +106,7 @@ router.post("/register", (req, resp) => {
       })
     })
     .then((getGeoRes)=>{
-      console.log(getGeoRes)
+      console.log("getGeoRes",getGeoRes)
       getfenceID = JSON.parse(getGeoRes)[0];
       conosle.log(getfenceID);
       return rp({
@@ -134,6 +134,7 @@ router.post("/register", (req, resp) => {
       })
     })
     .then((finaluserdata)=>{
+      console.log("final user data",finaluserdata)
       if (!finaluserdata) throw "no user is regiestered try again later";
       let arr = [];
       arr[0] = finaluserdata;
