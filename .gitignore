@@ -2,6 +2,5 @@ node_modules/
 publicApiServer/node_modules
 database/resources/node_modules
 keys
-publicApiServer/conf/
 publicApiServer/wialon/test.js
 node.pem
