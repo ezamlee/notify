@@ -70,7 +70,7 @@ router.post("/register", (req, resp) => {
     let userid = null,getfenceID=null;
 
     let validDataEntered = new Promise((resolve, reject) => {
-      console.log(req.params);
+      console.log(req.query);
       if(nid && secureCode && locLat && locDesc && locLong && name && password && phone && email)
       {
 

@@ -13,6 +13,8 @@ function sessionModule(){
       *
       */
       console.log(lastsid);
+      console.log(conf.token);
+      
       return rp({
         method: 'GET',
         url: 'https://hst-api.wialon.com/wialon/ajax.html',
