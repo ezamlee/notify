@@ -1,5 +1,5 @@
 module.exports = {
-	"token" : "0e31585320d29e3db8ca8cbeab99ed5f0D7BE7ABF62C6B2B116939425C9D0537945796ED",
+	"token" : "0e31585320d29e3db8ca8cbeab99ed5f865DECF10BCA226E59E53EAD37438D898F0C5257",
 	"secretWord" : "mysecretword",
 	"source"     : "15766062",
 	"mailPass"   : "P@$$w0rd123",
