@@ -18,6 +18,7 @@ function fenceModule() {
 
       //Get Session
       mySession = JSON.parse(await session.getSession());
+      console.log(mySession);
       if (mySession.error) throw "unable to get session please verify token and try again later"
 
       //API to create a geofence

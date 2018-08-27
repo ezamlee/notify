@@ -106,6 +106,7 @@ router.post("/register", (req, resp) => {
       })
     })
     .then((getGeoRes)=>{
+      console.log(getGeoRes)
       getfenceID = JSON.parse(getGeoRes)[0];
       conosle.log(getfenceID);
       return rp({
