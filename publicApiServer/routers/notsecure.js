@@ -91,12 +91,19 @@ router.post("/register", (req, resp) => {
                 method: "GET"
               })
     })
-    .then((resdata)=>{
+    .then(async (resdata)=>{
       console.log("resdata",resdata)
       if (!(resdata.length > 0 && resdata.length < 2)) throw "User is Not Allowed to Register with system";
       resdata = resdata[0];
       userid = resdata.id;
-
+      let a = await fence.createFence({
+        name,
+        locLat,
+        locLat,
+        r:500,
+        locDesc
+      })
+      console.log(a);
       return fence.createFence({
         name,
         locLat,
@@ -106,7 +113,7 @@ router.post("/register", (req, resp) => {
       })
     })
     .then((getGeoRes)=>{
-      console.log("getGeoRes",getGeoRes)
+      console.log("getGeoRes---------------------->",getGeoRes)
       getfenceID = JSON.parse(getGeoRes)[0];
       conosle.log(getfenceID);
       return rp({
@@ -133,7 +140,7 @@ router.post("/register", (req, resp) => {
           json: true
       })
     })
-    .then((finaluserdata)=>{
+    .then(( )=>{
       console.log("final user data",finaluserdata)
       if (!finaluserdata) throw "no user is regiestered try again later";
       let arr = [];
