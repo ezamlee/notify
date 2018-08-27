@@ -101,7 +101,7 @@ function update_data() {
 		})
 		.catch((err) => console.log(err))
 }
-
-cron.schedule('* */5 * * * *', function () {
-	update_data();
-});
+update_data();
+// cron.schedule('* */5 * * * *', function () {
+// 	update_data();
+// });
