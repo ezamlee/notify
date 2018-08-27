@@ -70,7 +70,7 @@ router.post("/register", (req, resp) => {
     let userid = null,getfenceID=null;
 
     let validDataEntered = new Promise((resolve, reject) => {
-      console.log(req.body);
+      console.log(req.params);
       if(nid && secureCode && locLat && locDesc && locLong && name && password && phone && email)
       {
 
@@ -92,6 +92,7 @@ router.post("/register", (req, resp) => {
               })
     })
     .then((resdata)=>{
+      console.log("resdata",resdata)
       if (!(resdata.length > 0 && resdata.length < 2)) throw "User is Not Allowed to Register with system";
       resdata = resdata[0];
       userid = resdata.id;
@@ -106,6 +107,7 @@ router.post("/register", (req, resp) => {
     })
     .then((getGeoRes)=>{
       getfenceID = JSON.parse(getGeoRes)[0];
+      conosle.log(getfenceID);
       return rp({
           method: 'POST',
           url: `http://localhost:3000/api/parents/upsertWithWhere?where={"id":"${userid}"}`,
