@@ -1,0 +1,41 @@
+Requirements
+------------------------>
+
+1- School 
+
+    - Notifications
+
+
+
+2- Parent
+    
+    - Notifications
+        - Arrival 
+        - Student I/O
+        - In School
+    
+    - Drive Behaviour
+        - Grade of Driver Behaviour meter from 1 to 10 [ Speed , Break , Stops ] to average day and 6 months
+    
+    - Bus Trip Track
+        - Date
+        - Last
+        - Out of track
+
+    - PA System
+        - Targeted Audience
+
+    - Test Scores
+        - Notification System
+        - Events
+        - 
+
+    - Temperature in Bus
+    
+    - Injection Dose Mangement
+    
+    - Food Data
+    
+    - 
+    
+    -------------------------------------------------------------------------------------------------------
