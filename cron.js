@@ -7,14 +7,14 @@ var rp = require('request-promise');
 var conf = require('./publicApiServer/conf/serverconf');
 function update_data() {
 	rp({
-			uri: `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"0e31585320d29e3db8ca8cbeab99ed5f8FF39C43F147343E1164472619A14ADA69B535B7"}`,
-			method: "GET",
-			header: {
-				"Content-Type": "application/json",
-				"Accept": "application/json"
-			},
-			json: true
-		})
+		uri: `https://hst-api.wialon.com/wialon/ajax.html?svc=token/login&params={"token":"${conf.token}"}`,
+		method: "GET",
+		header: {
+			"Content-Type": "application/json",
+			"Accept": "application/json"
+		},
+		json: true
+	})
 		.then((wialonResp) => {
 			return wialonResp.eid
 		})
@@ -41,17 +41,19 @@ function update_data() {
 			return result
 		})
 		.then((tagsArray) => {
-			var result = tagsArray.map(function (obj) {
-				return {
-					"name"	: obj["n"],
-					"tag_id": obj["c"],
-					"bus"		: obj["jp"]["bus"],
-					"bus_id": obj["jp"]["bus_id"],
-					"pnid"	: obj["jp"]["pnid"],
-					"id" 		: obj["id"]
-				}
-			})
-			return result
+			if (tagsArray) {
+				var result = tagsArray.map(function (obj) {
+					return {
+						"name": obj["n"],
+						"tag_id": obj["c"],
+						"bus": obj["jp"]["bus"],
+						"bus_id": obj["jp"]["bus_id"],
+						"pnid": obj["jp"]["pnid"],
+						"id": obj["id"]
+					}
+				})
+				return result
+			}
 		})
 		.then((tagsArray) => {
 			tagsArray.forEach((element) => {
@@ -84,15 +86,15 @@ function update_data() {
 									body: parentData,
 									json: true
 								})
-								.then((success) => {}).catch((err) => {})
+									.then((success) => { }).catch((err) => { })
+							}
 						}
-					}
-				}).catch((err) => console.log(err))
-			})
+					}).catch((err) => console.log(err))
+				})
+			}
 		})
 		.catch((err) => console.log(err))
 }
-
 cron.schedule('* */5 * * * *', function () {
 	update_data();
 });
