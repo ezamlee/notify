@@ -4,7 +4,9 @@
   "description": "A server that handle notification using any protocol",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "keywords": [
     "notification",
@@ -26,10 +28,12 @@
     "qs": "^6.5.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "eslint": "^4.6.1",
     "eslint-config-google": "^0.9.1"
-  }
+  },
+  "snyk": true
 }
