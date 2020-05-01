@@ -1,0 +1,28 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - loopback-connector-mongodb > strong-globalize > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - mongoose > async > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - request-promise > request-promise-core > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - loopback-connector-mongodb > strong-globalize > async > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - loopback-connector-mongodb > loopback-connector > async > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - loopback-connector-mongodb > loopback-connector > strong-globalize > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - loopback-connector-mongodb > loopback-connector > strong-globalize > async > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - loopback-connector-mongodb > strong-globalize > g11n-pipeline > swagger-client > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - loopback-connector-mongodb > loopback-connector > strong-globalize > g11n-pipeline > swagger-client > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - loopback-connector-mongodb > strong-globalize > g11n-pipeline > swagger-client > isomorphic-form-data > form-data > async > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
+    - loopback-connector-mongodb > loopback-connector > strong-globalize > g11n-pipeline > swagger-client > isomorphic-form-data > form-data > async > lodash:
+        patched: '2020-05-01T00:19:22.635Z'
