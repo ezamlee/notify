@@ -21,7 +21,7 @@
     "loopback-connector-mongodb": "^3.3.1",
     "mongoose": "^4.13.9",
     "node-cron": "^1.2.1",
-    "nodemailer": "^4.4.1",
+    "nodemailer": "^6.4.16",
     "qa": "0.0.1",
     "qs": "^6.5.1",
     "request": "^2.83.0",
