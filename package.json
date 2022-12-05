@@ -15,15 +15,15 @@
   "author": "Ahmed M Essam & Heba Bahaa",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.19.2",
     "cors": "^2.8.4",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "loopback-connector-mongodb": "^3.3.1",
     "mongoose": "^4.13.9",
     "node-cron": "^1.2.1",
     "nodemailer": "^4.4.1",
     "qa": "0.0.1",
-    "qs": "^6.5.1",
+    "qs": "^6.5.3",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "socket.io": "^2.0.4"
